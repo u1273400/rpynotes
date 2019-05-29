@@ -1,0 +1,25 @@
+{
+    "host": "gaia.hud.ac.uk",
+    "port": 22,
+    "username": "john",
+    "password": "Al4min4J",
+    "protocol": "sftp",
+    "agent": null,
+    "privateKeyPath": null,
+    "passphrase": null,
+    "passive": false,
+    "interactiveAuth": false,
+    "remotePath": "/home/john/Dropbox/rtmp/src/python/notebooks/ok-rnn",
+    "uploadOnSave": true,
+    "syncMode": "update",
+    "watcher": {
+        "files": false,
+        "autoUpload": false,
+        "autoDelete": false
+    },
+    "ignore": [
+        "**/.vscode/**",
+        "**/.git/**",
+        "**/.DS_Store"
+    ]
+}
