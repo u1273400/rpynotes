@@ -1,0 +1,448 @@
+,dic,lex
+0,dieme,DD I E M EH
+1,dukome,DD U K O M EH
+2,naame,N A A M EH
+3,buchuaye,BB UH TS UH A Y E
+4,koruapu,K O R U A P UH
+5,opuama,O P U A M A
+6,ikeasun,I K E A S UH N
+7,dokibosa,DD OH K IH BB O S A
+8,puko,P UH K OH
+9,bubalabala,BB UH BB A L A BB A L A
+10,tonari,T OH N A R IH
+11,fiye,F IH Y E
+12,beinmabia,BB E I N M A BB IH A
+13,kobirima,K O BB I R I M A
+14,rehobuam,R EH H O B U A M
+15,enjelbo,E N DZ EH L BB OH
+16,ogono,OH G OH N OH
+17,dokimabia,D OH K IH M A BB IH A
+18,kubiekuroma,K U BB I E K UH R OH M A
+19,okue,OH K UH EH
+20,soni,S OH N IH
+21,jekonaya,DZ E K OH N A Y A
+22,josef,DZ O S EH F
+23,miese,M IH EH S E
+24,torokodabo,T OH R OH K OH D A BB OH
+25,sobie,S O BB I E
+26,minea,M I N E A
+27,epele,E P E L E
+28,se,S EH
+29,firimame,F IH R IH M A M EH
+30,oru,O R U
+31,nde,N D E
+32,tekeme,T EH K EH M EH
+33,yee,Y E EH
+34,devid,D E V I D
+35,diki,DD I K I
+36,pekere,P EH K EH R EH
+37,la,L A
+38,dieapu,DD I E A P UH
+39,doki,DD OH K IH
+40,tamunobere,T A M UH N OH BB EH R EH
+41,osirosiroba,O S I R O S I R O BB A
+42,oyi,O Y I
+43,anieso,A N IH E S O
+44,shealtiel,S H E A L T I EH L
+45,matan,M A T A N
+46,biebele,BB I E BB EH L EH
+47,ozaya,O Z A Y A
+48,kokoma,K OH K OH M A
+49,be,B EH
+50,obuju,OH BB UH DZ UH
+51,pirisa,P IH R IH S A
+52,irua,IH R UH A
+53,obed,O B E D
+54,dadikibia,DD A DD I K I BB IH A
+55,berijineme,BB E R I DZ I N E M EH
+56,jerusalem,DZ E R U S A L EH M
+57,gbinbia,GB I N BB IH A
+58,ibu,IH0 BB UH
+59,birikunye,BB I R I K U N Y E
+60,kubie,K U BB I E
+61,bugbeinke,BB UH GB EH IH N K EH
+62,ngisi,N G IH S IH
+63,meri,M E R I
+64,karakaraye,K A R A K A R A Y E
+65,mieme,M IH EH M EH
+66,jizos,DZ I Z OH S
+67,chie,TS IH EH
+68,torukweinma,T OH R UH K W E I N M A
+69,nyengi,N Y E N G I
+70,goyegoye,G O Y E G O Y E
+71,rema,R E M A
+72,chuabia,TS UH A BB IH A
+73,fiema,F I E M A
+74,boloka,BB OH L OH K A
+75,mun,M U N
+76,okuma,OH K UH M A
+77,ibi,I BB I
+78,beme,BB EH M EH
+79,tisam,T I S A M
+80,obuduko,OH BB UH DD U K O
+81,chingi,TS IH N G IH
+82,amanyanabo,A M A N Y A N A BB OH
+83,okwein,OH K W EH IH N
+84,mama,M A M A
+85,sibupikisam,S I BB UH P IH K IH S A M
+86,zera,Z EH R A
+87,simeokue,S I M E OH K UH EH
+88,owubonemika,O W U BB OH N E M I K A
+89,betlihem,B EH T L I H EH M
+90,gbin,GB I N
+91,pakumabome,P A K UH M A BB O M EH
+92,bee,BB E EH
+93,vinpiki,V I N P IH K IH
+94,gose,G O S E
+95,wa,W A
+96,dawoju,DD A W OH DZ U
+97,tonme,T OH N M EH
+98,pekereme,P EH K EH R EH M EH
+99,lame,L A M EH
+100,asa,A S A
+101,ehaz,E H A Z
+102,jon,DZ OH N
+103,oko,OH K OH
+104,kunoma,K U N O M A
+105,pa,P A
+106,olome,OH L OH M EH
+107,kienma,K IH EH N M A
+108,ini,I N I
+109,pakabome,P A K A BB O M EH
+110,opuso,O P U S OH
+111,finji,F IH N DZ IH
+112,magbolu,M A GB OH L UH
+113,owuabe,O W U A BB EH
+114,dukoari,DD U K O A R IH
+115,jotam,DZ O T A M
+116,piriabe,P IH R IH A BB EH
+117,birikunme,BB I R I K U N M EH
+118,mono,M OH N OH
+119,bin,B I N
+120,karakaramasam,K A R A K A R A M A S A M
+121,duko,DD U K O
+122,mesi,M E S I
+123,dawo,DD A W OH
+124,saki,S A K IH
+125,iri,IH2 R IH
+126,simeogbo,S I M E O GB O
+127,juda,DZ U D A
+128,miemieboe,M IH EH M IH EH BB OH EH
+129,de,D E
+130,chinmgbolu,TS IH N M GB OH L UH
+131,solomon,S O L O M OH N
+132,fura,F U R A
+133,ta,T A
+134,yi,Y I
+135,ijipt,I DZ I P T
+136,perez,P EH R EH Z
+137,dokibia,DD OH K IH BB IH A
+138,oyighoriapu,O Y I G H OH R IH A P UH
+139,balafame,B A L A F A M EH
+140,pirime,P IH R IH M EH
+141,jodan,DZ OH D A N
+142,ton,T OH N
+143,yesele,Y E S EH L EH
+144,opuma,O P U M A
+145,elieza,E L I E Z A
+146,ele,E L E
+147,owuapuawo,O W U A P UH A W OH
+148,toku,T OH K UH
+149,teme,T EH M EH
+150,ibubeleme,IH BB UH BB EH L EH M EH
+151,ari,A0 R I
+152,kiri,K I R I
+153,nengime,N EH N G IH M EH
+154,erechi,EH R EH TS IH
+155,dina,DD I N A
+156,iruapakapaka,IH R UH A P A K A P A K A
+157,kpekisam,KP E K I S A M
+158,okimun,O K IH M U N
+159,aria,A R IH A
+160,pele,P EH L EH
+161,obu,OH0 BB UH
+162,boe,BB O EH
+163,dawonemiapu,DD A W OH N E M I A P UH
+164,nazaretbo,N A Z A R EH T BB OH
+165,balafa,BB A L A F A
+166,ikiankoroapu,IH K IH A N K O R O A P UH
+167,ogboku,O GB O K U
+168,dukuke,DD UH K UH K EH
+169,jokuma,DZ O K U M A
+170,zerubabel,Z E R U B A B EH L
+171,kpereki,KP EH R EH K IH
+172,igani,IH G A N IH
+173,okúku,O K U2 K U2
+174,piki,P IH K IH
+175,owutoku,O W U T OH K UH
+176,eliakim,E L IH A K IH M
+177,gbeinyee,GB EH IH N Y E EH
+178,ogu,O G U
+179,koko,K O K O
+180,barasin,BB A R A S I N
+181,makubie,M A K U BB I E
+182,hezikaya,H EH Z IH K A Y A
+183,rehab,R E H A B
+184,re,R E
+185,iwo,I W O
+186,bugererema,BB UH G E R E R E M A
+187,eka,EH K A
+188,duaboromabia,DD UH A BB OH R OH M A BB IH A
+189,mioku,M IH OH K UH
+190,maa,M A A
+191,babilon,B A B I L OH N
+192,bipi,BB IH P IH
+193,simekaogbo,S I M E K A O GB O
+194,galili,G A L I L I
+195,lolia,L O L I A
+196,nemi,N E M I
+197,ma,M A
+198,amon,A M OH N
+199,ideri,I D E R I
+200,jesi,DZ EH S I
+201,mimgba,M IH M GB A
+202,chingbolu,TS IH N GB OH L UH
+203,kokomaye,K OH K OH M A Y E
+204,konme,K OH N M EH
+205,bere,BB EH R EH
+206,izrel,I Z R EH L
+207,enekakaa,E N E K A K A A
+208,pakasome,P A K A S O M EH
+209,oku,OH K UH
+210,oria,O R I A
+211,gboribo,GB OH R IH BB OH
+212,mae,M A EH
+213,oyiineina,O Y I I N E I N A
+214,jekob,DZ E K OH B
+215,mie,M IH EH
+216,tomoni,T O M O N I
+217,pakumame,P A K UH M A M EH
+218,bari,BB A R IH
+219,aniatibi,A N IH A T IH B IH
+220,ineda,I N E D A
+221,chinbia,TS IH N BB IH A
+222,sara,S A R A
+223,amanyanakiri,A M A N Y A N A K I R I
+224,aizaya,A IH Z A Y A
+225,mine,M I N E
+226,sarame,S A R A M EH
+227,tamuno,T A M UH N OH
+228,piri,P IH R IH
+229,boaz,B O A Z
+230,abiud,A B I U D
+231,imanuel,I M A N UH EH L
+232,kun,K U N
+233,buo,BB UH OH
+234,iona,I OH N A
+235,piribein,P IH R IH BB E I N
+236,ipiamgba,IH P IH A M GB A
+237,koromari,K O R O M A R IH
+238,taro,T A R OH
+239,tibini,T IH BB IH N IH
+240,toroko,T OH R OH K OH
+241,boko,BB OH K OH
+242,mengisara,M E N G I S A R A
+243,izrelapu,I Z R EH L A P UH
+244,anierechi,A N IH EH R EH TS IH
+245,nyo,N Y OH
+246,ye,Y E
+247,oki,OH K IH
+248,da,D A
+249,muari,M U A R IH
+250,i,IH0
+251,biari,BB I A R IH
+252,bome,BB O M EH
+253,owutibi,O W U T IH BB IH
+254,baasam,BB A A S A M
+255,mieyee,M IH EH Y E EH
+256,paka,P A K A
+257,yime,Y I M EH
+258,sime,S I M E
+259,dachieme,D A TS IH EH M EH
+260,mangisobia,M A N G IH S O BB IH A
+261,selebia,S EH L EH BB IH A
+262,so,S O
+263,nwo,NW OH
+264,nyanabo,N Y A N A BB OH
+265,siki,S IH K IH
+266,bebia,BB EH BB IH A
+267,salmon,S A L M OH N
+268,fisam,F IH S A M
+269,ateli,A T E L I
+270,gbori,GB OH R IH
+271,aminadab,A M IH N A D A B
+272,o,O0
+273,kirikiri,K I R I K I R I
+274,omine,O M I N E
+275,mangi,M A N G IH
+276,nama,N A M A
+277,berenime,BB E R E N I M EH
+278,ene,E N E
+279,ba,BB A
+280,biejudaboe,BB I E DZ U DD A BB OH EH
+281,ikiankorobo,IH K IH A N K O R O BB OH
+282,damaboari,D A M A BB O A R IH
+283,abaija,A B A IH DZ A
+284,sadusiapu,S A D U S I A P UH
+285,chuaka,TS UH A K A
+286,die,DD I E
+287,tubo,T UH BB OH
+288,si,S I
+289,babia,BB A BB IH A
+290,simeme,S I M E M EH
+291,nemime,N E M I M EH
+292,jin,DZ I N
+293,oruwu,O R U W U
+294,ori,O R I
+295,boroma,BB OH R OH M A
+296,aku,A K UH
+297,bike,BB I K EH
+298,nyongoroe,N Y OH N G OH R OH EH
+299,tema,T E M A
+300,ebraham,E B R A H A M
+301,sarabia,S A R A BB IH A
+302,kura,K UH R A
+303,rufu,R U F U
+304,eliud,E L I U D
+305,min,M IH N
+306,inia,I N I A
+307,dadiki,DD A DD I K I
+308,gbelame,GB E L A M EH
+309,damamunma,D A M A M U N M A
+310,karakarama,K A R A K A R A M A
+311,konsam,K OH N S A M
+312,beleme,BB EH L EH M EH
+313,damabo,D A M A BB O
+314,agbamieapu,A GB A M IH EH A P UH
+315,bebo,BB EH BB OH
+316,iya,IH0 Y A
+317,piribia,P IH R IH BB IH A
+318,akilos,A K IH L OH S
+319,joram,DZ O R A M
+320,bukuroma,BB UH K UH R OH M A
+321,farisiapu,F A R I S I A P UH
+322,jehosiafat,DZ E H O S IH A F A T
+323,tarime,T A R IH0 M EH
+324,barasinsam,BB A R A S I N S A M
+325,kuro,K UH R OH
+326,gonogono,G O N O G O N O
+327,manasi,M A N A S IH
+328,josaya,DZ O S A Y A
+329,fini,F IH N IH
+330,naa,N A A
+331,orime,OH R IH M EH
+332,ogbo,O GB O
+333,akim,A K IH M
+334,lasa,L A S A
+335,azo,A Z OH
+336,kraist,K R A IH S T
+337,nwose,NW OH S E
+338,mi,M I
+339,dabe,D A BB EH
+340,pirie,P IH R IH EH
+341,akpaka,A KP A K A
+342,namaichuka,N A M A I TS U K A
+343,dokiapu,DD OH K IH A P UH
+344,koroma,K O R O M A
+345,yela,Y E L A
+346,ineina,I N E I N A
+347,bakama,B A K A M A
+348,chinme,TS IH N M EH
+349,diepakuma,DD I E P A K UH M A
+350,inimgba,I N I M GB A
+351,owu,O W U
+352,amaogbo,A M A O GB O
+353,yibia,Y I BB IH A
+354,kon,K OH N
+355,sima,S I M A
+356,dinma,D I N M A
+357,mamgba,M A M GB A
+358,bo,BB OH
+359,olokuabe,O L O K U A BB EH
+360,din,DD I N
+361,sobia,S OH BB IH A
+362,fi,F IH
+363,mengisarabo,M E N G I S A R A BB OH
+364,eremenitoku,E R E M E N I T OH K UH
+365,herod,H EH R OH D
+366,mangiso,M A N G IH S O
+367,simebia,S I M E BB IH A
+368,na,N A
+369,osi,O S I
+370,anisiki,A N IH S IH K IH
+371,okibo,OH K IH BB O
+372,ama,A M A
+373,fieariye,F I E A R IH Y E
+374,buru,BB U R U
+375,pakabobia,P A K A BB O BB IH A
+376,igoniapu,I G O N I A P UH
+377,tari,T A R IH
+378,chin,TS IH N
+379,wasama,W A S A M A
+380,awomeni,A W OH M EH N IH
+381,mgba,M GB A
+382,anianga,A N IH A N G A
+383,ojuapura,O DZ U A P UH R A
+384,nyongoro,N Y OH N G OH R OH
+385,bara,BB A R A
+386,yuraya,Y U R A Y A
+387,judia,DZ U D I A
+388,omie,O M I EH
+389,igbiki,I GB I K I
+390,juapu,DZ U A P UH
+391,munyee,M U N Y E EH
+392,bu,BB UH
+393,kpeki,KP E K I
+394,oloko,O L O K O
+395,opu,O P U
+396,seni,S E N I
+397,finjie,F I N DZ I EH
+398,iderimaigoniapu,I D E R I M A I G O N I A P UH
+399,awo,A W OH
+400,obudukoapu,OH BB UH DD U K O A P UH
+401,weri,W EH R IH
+402,dokibo,DD OH K IH BB O
+403,abu,A2 BB UH
+404,datekeremabia,D A T E K E R E M A BB IH A
+405,dupari,DD UH P A R IH
+406,rechel,R E TS EH L
+407,deki,D E K I
+408,nyaname,N Y A N A M EH
+409,boro,BB OH R OH
+410,bie,BB I EH
+411,nason,N A S OH N
+412,apala,A P A L A
+413,iriayee,IH R IH A Y E EH
+414,fiafia,F IH A F IH A
+415,ram,R A M
+416,nazaret,N A Z A R EH T
+417,dawu,DD A W U
+418,onwuele,O NW U E L E
+419,hezron,H EH Z R OH N
+420,onwu,O NW U
+421,sise,S IH S EH
+422,pakapaka,P A K A P A K A
+423,furo,F U R O
+424,amanyana,A M A N Y A N A
+425,ani,A0 N IH
+426,giein,G IH EH IH N
+427,dokime,DD OH K IH M EH
+428,bokateinke,BB O K A T EH IH N K EH
+429,anga,A N G A
+430,mesaya,M EH S A Y A
+431,tonapu,T OH N A P UH
+432,fime,F IH M EH
+433,gbolomake,GB O L O M A K EH
+434,owuapuminapu,O W U A P UH M IH N A P UH
+435,mengi,M E N G I
+436,bia,BB IH A
+437,pakabo,P A K A BB O
+438,zadok,Z A D OH K
+439,mume,M U M EH
+440,ominea,O M I N E A
+441,a,A2
+442,ra,R A
+443,torokoisun,T OH R OH K OH IH S UH N
+444,bebe,BB EH BB EH
+445,buosome,BB U O S OH M EH
+446,boima,BB OH IH M A
