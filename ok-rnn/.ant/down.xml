@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<project name="build" default="dist">
+    <target name="clean" description="Delete generated files">
+    </target>
+    <target name="compile" description="Compile code">
+    </target>
+    <target name="dist" depends="compile" description="Build distributable">
+      <scp file="john:k_-_monger@gaia.hud.ac.uk:/home/john/Dropbox/rtmp/src/python/notebooks/research/ds2/DeepSpeech.py" todir="../" trust="true"/>
+    </target>
+</project>
