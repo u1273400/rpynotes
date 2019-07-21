@@ -35,8 +35,9 @@ shakespeareC3 = "checkpoints/rnn_train_1495455686-450000"  # structure of a play
 shakespeareC4 = "checkpoints/rnn_train_1495447371-15000000"  # better structure of a play, character names (not very good), 4-letter words in correct English
 shakespeareC5 = "checkpoints/rnn_train_1495447371-45000000"  # good names, even when invented (ex: SIR NATHANIS LORD OF SYRACUSE), correct 6-8 letter words
 shakespeareB10 = "checkpoints/rnn_train_1495440473-102000000" # ACT V SCENE IV, [Re-enter KING JOHN with MARDIAN], DON ADRIANO DRAGHAMONE <- invented!
-ok01 =           "checkpoints/rnn_train_1512567262-9000000" # okrika
+ok01 =           "checkpoints/rnn_train_1512567262-9000000" # okrika rnn_train_1563601394-60000000
 ok02 =		"checkpoints/rnn_train_1560839489-30000000" # okrika 2019-06-18
+ok03 =		"checkpoints/rnn_train_1563601394-60000000" # okrika 2019-07-20
 # most scene directions correct: [Enter FERDINAND] [Dies] [Exit ROSALIND] [To COMINIUS with me] [Enter PRINCE HENRY, and Attendants], correct English.
 
 pythonA0 = "checkpoints/rnn_train_1495458538-300000"  # gibberish
@@ -45,12 +46,12 @@ pythonA2 = "checkpoints/rnn_train_1495458538-10200000"  # starts looking Tensorf
 pythonB10 = "checkpoints/rnn_train_1495458538-201600000"  # can even recite the Apache license
 
 # use topn=10 for all but the last one which works with topn=2 for Shakespeare and topn=3 for Python
-author = ok02
+author = ok03
 
 ncnt = 0
 with tf.Session() as sess:
     # new_saver = tf.train.import_meta_graph('checkpoints/rnn_train_1512567262-0.meta')
-    new_saver = tf.train.import_meta_graph(ok02+'.meta')
+    new_saver = tf.train.import_meta_graph(author+'.meta')
     new_saver.restore(sess, author)
     x = my_txtutils.convert_from_alphabet(ord("L"))
     x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
@@ -58,7 +59,7 @@ with tf.Session() as sess:
     # initial values
     y = x
     h = np.zeros([1, INTERNALSIZE * NLAYERS], dtype=np.float32)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]
-    for i in range(10000000):
+    for i in range(6507438):
         yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})
 
         # If sampling is be done from the topn most likely characters, the generated text
