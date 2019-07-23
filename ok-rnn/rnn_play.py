@@ -38,6 +38,7 @@ shakespeareB10 = "checkpoints/rnn_train_1495440473-102000000" # ACT V SCENE IV, 
 ok01 =           "checkpoints/rnn_train_1512567262-9000000" # okrika rnn_train_1563601394-60000000
 ok02 =		"checkpoints/rnn_train_1560839489-30000000" # okrika 2019-06-18
 ok03 =		"checkpoints/rnn_train_1563601394-60000000" # okrika 2019-07-20
+bb01 ="checkpoints/rnn_train_1563814502-18000000" # bible 2019-07-22
 # most scene directions correct: [Enter FERDINAND] [Dies] [Exit ROSALIND] [To COMINIUS with me] [Enter PRINCE HENRY, and Attendants], correct English.
 
 pythonA0 = "checkpoints/rnn_train_1495458538-300000"  # gibberish
@@ -46,7 +47,7 @@ pythonA2 = "checkpoints/rnn_train_1495458538-10200000"  # starts looking Tensorf
 pythonB10 = "checkpoints/rnn_train_1495458538-201600000"  # can even recite the Apache license
 
 # use topn=10 for all but the last one which works with topn=2 for Shakespeare and topn=3 for Python
-author = ok03
+author = bb01 
 
 ncnt = 0
 with tf.Session() as sess:
@@ -62,7 +63,7 @@ with tf.Session() as sess:
     for i in range(6507438):
         yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})
 
-        # If sampling is be done from the topn most likely characters, the generated text
+        # If sampling is bedone from the topn most likely characters, the generated text
         # is more credible and more "english". If topn is not set, it defaults to the full
         # distribution (ALPHASIZE)
 
