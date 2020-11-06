@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="PYTHON_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
-    <orderEntry type="inheritedJdk" />
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/LRDB/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/NOV/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/gallery_1d_jupyter/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/ok-rnn/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/ok-rnn/bak" />
+      <excludeFolder url="file://$MODULE_DIR$/ok-rnn/checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/ok-rnn/log" />
+      <excludeFolder url="file://$MODULE_DIR$/ok-rnn/new_docs/.ipynb_checkpoints" />
+      <excludeFolder url="file://$MODULE_DIR$/pytorch/.ipynb_checkpoints" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.8" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
   <component name="TestRunnerService">
-    <option name="projectConfiguration" value="py.test" />
     <option name="PROJECT_TEST_RUNNER" value="py.test" />
   </component>
 </module>
