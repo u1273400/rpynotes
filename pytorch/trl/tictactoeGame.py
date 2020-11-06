@@ -17,7 +17,7 @@ class TicTacGame():
         self.winner = "TicTacToe Demo"
         self.windex = -1
 
-    def gameLoop(self)
+    def gameLoop(self):
         tictactoe = TicTacGame()
         tictactoe.getNextState()
         while (not tictactoe.isBoardFilled()):
@@ -27,25 +27,17 @@ class TicTacGame():
         if (tictactoe.isWinState()):
             print(("O" if tictactoe.XTurnToPlay else "X") , "wins");
         else
-        Console.WriteLine("game was a draw");
-        tictactoe.printState();
-        }
-        public
-        void
-        reset()
-        {
-            this.gameState = new
-        String[]
-        {"-", "-", "-", "-", "-", "-", "-", "-", "-"};
-        this.XTurnToPlay = true;
-        this.winner = "TicTacToe Demo";
-        this.windex = -1;
-        }
-        public
-        void
-        gamePlay()
-        {
-        if (this.isWinState() | | this.isBoardFilled())
+            print("game was a draw")
+            tictactoe.printState()
+
+    def reset(self):
+        self.gameState = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
+        self.XTurnToPlay = true;
+        self.winner = "TicTacToe Demo";
+        self.windex = -1;
+
+    def gamePlay():
+        if (self.isWinState() or se.isBoardFilled())
         this.reset();
         this.getNextState();
         }

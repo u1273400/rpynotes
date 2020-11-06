@@ -90,9 +90,7 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="85810024-d074-4da6-8e7c-457bb7bc77d1" name="Default" comment="tg01">
-      <change beforePath="$PROJECT_DIR$/.idea/ds2.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ds2.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="85810024-d074-4da6-8e7c-457bb7bc77d1" name="Default" comment="tg02">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/pytorch/trl/tictactoeGame.py" beforeDir="false" afterPath="$PROJECT_DIR$/pytorch/trl/tictactoeGame.py" afterDir="false" />
     </list>
@@ -162,7 +160,14 @@
       <option name="project" value="LOCAL" />
       <updated>1604644974823</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="tg02">
+      <created>1604646626425</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1604646626425</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -185,7 +190,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="tg00" />
     <MESSAGE value="tg01" />
-    <option name="LAST_COMMIT_MESSAGE" value="tg01" />
+    <MESSAGE value="tg02" />
+    <option name="LAST_COMMIT_MESSAGE" value="tg02" />
   </component>
   <component name="WindowStateProjectService">
     <state x="508" y="236" key="#Notifications" timestamp="1604644300406">
@@ -200,10 +206,10 @@
       <screen x="0" y="0" width="1536" height="824" />
     </state>
     <state x="277" y="57" key="SettingsEditor/0.0.1536.824@0.0.1536.824" timestamp="1604644471415" />
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604644983052">
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2" timestamp="1604646646910">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
-    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604644983052" />
+    <state x="361" y="145" key="Vcs.Push.Dialog.v2/0.0.1536.824@0.0.1536.824" timestamp="1604646646910" />
     <state x="586" y="326" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1604644580435">
       <screen x="0" y="0" width="1536" height="824" />
     </state>
