@@ -16,27 +16,63 @@ class TicTacGame():
         self.XTurnToPlay = True
         self.winner = "TicTacToe Demo"
         self.windex = -1
-        self.gameStates = []
-        self.games = []
+        self.gameHistory = []
+        self.qTrain = []
+        self.qVal = []
+        self.qTest = []
+        self.gameCount = 0
+        self.pindex = -1;
 
     def gameLoop(self):
-        tictactoe = TicTacGame()
-        tictactoe.getNextState()
-        while not tictactoe.isBoardFilled():
-            tictactoe.getNextState()
-            if tictactoe.isWinState():
+        self.reset()
+        self.getNextState()
+        while not self.isBoardFilled():
+            self.getNextState()
+            if not self.XTurnToPlay:
+                self.gameHistory.append(self.gameState)
+            if self.isWinState():
                 break
-        if tictactoe.isWinState():
-            print(("O" if tictactoe.XTurnToPlay else "X"), "wins")
+        if self.isWinState():
+            print(("O" if self.XTurnToPlay else "X"), "wins")
         else:
             print("game was a draw")
-        tictactoe.printState()
+        self.printState()
+        self.qUpdate()
+        print(self.gameCount)
+
+    def qUpdate(self):
+        qState=[]
+        qHist=[]
+        if not self.isBoardFilled() and self.XTurnToPlay:
+            return;
+        for i in range(len(self.gameHistory)):
+            gState = self.gameHistory.pop()
+            for gp in gState:
+                if gp == 'X':
+                    qState.append((1, 0))
+                elif gp == '0':
+                    qState.append((-1, 0))
+                elif gp == '-':
+                    qState.append((0, 0))
+                else:
+                    qState.append((1, 1))
+            qHist.append(qState)
+        self.gameCount += 1
+        if self.gameCount % 5 == 0:
+            self.qTest += qHist
+        elif self.gameCount % 10 == 0:
+            self.qVal += qHist
+        else:
+            self.qTrain += qHist
+
 
     def reset(self):
         self.gameState = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
         self.XTurnToPlay = True
         self.winner = "TicTacToe Demo"
         self.windex = -1
+        self.gameHistory=[]
+        self.pindex= -1
 
     def gamePlay(self):
         if self.isWinState() or self.isBoardFilled():
@@ -47,7 +83,13 @@ class TicTacGame():
         v = random.randint(0, 8)
         while self.gameState[v] != "-":
             v = random.randint(0, 8)
-        self.gameState[v] = "X" if self.XTurnToPlay else "O"
+        if self.XTurnToPlay:
+            if self.pindex != -1:
+                self.gameState[self.pindex] = "X"
+            self.gameState[v] = "*"
+            self.pindex=v
+        else:
+            self.gameState[v] = "O"
         self.XTurnToPlay = not self.XTurnToPlay
         self.winner = (("O" if self.XTurnToPlay else "X") + " wins") if self.isWinState() else ("game was a draw" if self.isBoardFilled() else self.winner)
         # print('this.windex=${this.windex}');
