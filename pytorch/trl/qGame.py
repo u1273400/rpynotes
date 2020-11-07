@@ -84,8 +84,8 @@ class TicTacGame():
             v = random.randint(0, 8)
         if self.XTurnToPlay:
             self.gameState[v] = '*'
-            print(self.gameState)
-            self.gameHistory.append(self.gameState)
+            #print(self.gameState)
+            self.gameHistory.append([x for x in self.gameState])
             self.gameState[v] = 'X'
         else:
             self.gameState[v] = "O"
