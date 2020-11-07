@@ -17,6 +17,7 @@ class TicTacGame():
         self.winner = "TicTacToe Demo"
         self.windex = -1
         self.gameStates = []
+        self.games = []
 
     def gameLoop(self):
         tictactoe = TicTacGame()
@@ -58,7 +59,7 @@ class TicTacGame():
             if (self.gameState[self.winstates[i][0]] != "-" and self.gameState[self.winstates[i][0]]
                     == self.gameState[self.winstates[i][1]] and
                     self.gameState[self.winstates[i][1]] == self.gameState[self.winstates[i][2]]):
-                self.windex=i
+                self.windex = i
                 winstate = True
                 break
         return winstate
@@ -76,21 +77,10 @@ class TicTacGame():
 
 
 def main():
-    ttt=TicTacGame()
+    ttt = TicTacGame()
     ttt.gameLoop()
 
 
 if __name__ == '__main__':
     main()
 
-'''
-    def testWinState(self)
-{
-for (var i=0;i < this.winstates.Length;i++){
-                                           // Console.WriteLine( @ "${this.winstates[i][0]}=${this.gameState[this.winstates[i][0]]}:${this.gameState[this.winstates[i][0]]!=" - "}");
-// Console.WriteLine( @ "${this.winstates[i][1]}=${this.gameState[this.winstates[i][1]]}:${this.gameState[this.winstates[i][1]]!="-"}");
-// Console.WriteLine( @ "${this.winstates[i][2]}=${this.gameState[this.winstates[i][2]]}:${this.gameState[this.winstates[i][2]]!="-"}");
-}
-}
-
-'''
