@@ -16,6 +16,7 @@ class TicTacGame():
         self.XTurnToPlay = True
         self.winner = "TicTacToe Demo"
         self.windex = -1
+        self.gameStates = []
 
     def gameLoop(self):
         tictactoe = TicTacGame()
@@ -25,7 +26,7 @@ class TicTacGame():
             if tictactoe.isWinState():
                 break
         if tictactoe.isWinState():
-            print(("O" if tictactoe.XTurnToPlay else "X") , "wins");
+            print(("O" if tictactoe.XTurnToPlay else "X"), "wins")
         else:
             print("game was a draw")
         tictactoe.printState()
@@ -71,7 +72,7 @@ class TicTacGame():
             for j in range(3):
                 sb += self.gameState[i * 3+j]
             print(sb)
-            sb=""
+            sb = ""
 
 
 def main():
