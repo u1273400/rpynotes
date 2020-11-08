@@ -34,13 +34,13 @@ class TicTacGame():
             self.getNextState()
             if self.isWinState():
                 break
-        if self.isWinState():
-            print(("O" if self.XTurnToPlay else "X"), "wins")
-        else:
-            print("game was a draw")
-        self.printState()
+        # if self.isWinState():
+        #     print(("O" if self.XTurnToPlay else "X"), "wins")
+        # else:
+        #     print("game was a draw")
+        #self.printState()
         self.qUpdate()
-        print("game count =", self.gameCount)
+        #print("game count =", self.gameCount)
 
     def qUpdate(self):
         qHist = []
