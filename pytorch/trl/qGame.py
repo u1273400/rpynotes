@@ -1,5 +1,5 @@
 import random
-
+import torch
 
 class TicTacGame():
     def __init__(self):
@@ -128,7 +128,9 @@ class TicTacGame():
         ttt=TicTacGame()
         for i in range(50):
             ttt.gameLoop()
-        return ttt.qTrain, ttt.lTrain, ttt.qVal, ttt.lVal, ttt.qTest, ttt.lTest
+        return torch.tensor(ttt.qTrain), torch.tensor(ttt.lTrain), \
+               torch.tensor(ttt.qVal), torch.tensor(ttt.lVal), \
+               torch.tensor(ttt.qTest), torch.tensor(ttt.lTest)
 
 def main():
     ttt = TicTacGame()
