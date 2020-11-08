@@ -53,7 +53,7 @@ class TicTacNet(nn.Module):
             # print statistics
             running_loss += loss.item()
             if i % 1000 == 999:    # print every 1000 mini-batches
-                print('[mini-batch %d] loss: %.3f' %
+                print('[mini-batch %5d] loss: %.3f' %
                       (i + 1, running_loss / (i+1)))
 
         print('Finished Training')
