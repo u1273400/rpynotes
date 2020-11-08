@@ -34,7 +34,7 @@ class TicTacNet(nn.Module):
         # testdata = []
         # testlabels = []
         running_loss = 0.0
-        for i in range(2):  # loop over the dataset multiple times
+        for i in range(20000):  # loop over the dataset multiple times
 
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels, qVal, lVal, qTest, lTest = TicTacGame.minibatch()
@@ -52,8 +52,8 @@ class TicTacNet(nn.Module):
 
             # print statistics
             running_loss += loss.item()
-            if i % 2 == 1:    # print every 2 mini-batches
-                print('[mini-batch %5d] loss: %.3f' %
+            if i % 1000 == 999:    # print every 1000 mini-batches
+                print('[mini-batch %d] loss: %.3f' %
                       (i + 1, running_loss / (i+1)))
 
         print('Finished Training')

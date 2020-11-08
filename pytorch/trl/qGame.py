@@ -59,7 +59,7 @@ class TicTacGame():
                 else:
                     qState.append((1, 1))
             qHist = [[f for f, c in qState]
-                , [c for f, c in qState]]
+                , [c for f, c in qState].index(1)]
             # print(qHist[0])
             if self.gameCount % 5 == 0 and self.gameCount % 45 != 0:
                 self.qTest.append(qHist[0])
@@ -128,9 +128,9 @@ class TicTacGame():
         ttt=TicTacGame()
         for i in range(50):
             ttt.gameLoop()
-        return torch.tensor(ttt.qTrain), torch.tensor(ttt.lTrain), \
-               torch.tensor(ttt.qVal), torch.tensor(ttt.lVal), \
-               torch.tensor(ttt.qTest), torch.tensor(ttt.lTest)
+        return torch.tensor(ttt.qTrain, dtype=torch.float), torch.tensor(ttt.lTrain, dtype=torch.long), \
+               torch.tensor(ttt.qVal, dtype=torch.float), torch.tensor(ttt.lVal, dtype=torch.long), \
+               torch.tensor(ttt.qTest, dtype=torch.float), torch.tensor(ttt.lTest, dtype=torch.long)
 
 def main():
     ttt = TicTacGame()
