@@ -31,15 +31,15 @@ class TicTacNet(nn.Module):
         criterion = nn.CrossEntropyLoss()
         optimizer = optim.SGD(net.parameters(), lr=0.001, momentum=0.9)
 
-        testdata = []
-        testlabels = []
+        # testdata = []
+        # testlabels = []
         running_loss = 0.0
         for i in range(2):  # loop over the dataset multiple times
 
             # get the inputs; data is a list of [inputs, labels]
             inputs, labels, qVal, lVal, qTest, lTest = TicTacGame.minibatch()
-            testdata += qTest
-            testlabels += lTest
+            # testdata += qTest
+            # testlabels += lTest
 
             # zero the parameter gradients
             optimizer.zero_grad()
