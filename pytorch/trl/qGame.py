@@ -1,5 +1,6 @@
 import random
 
+
 class TicTacGame():
     def __init__(self):
         self.winstates = [
@@ -20,6 +21,9 @@ class TicTacGame():
         self.qTrain = []
         self.qVal = []
         self.qTest = []
+        self.lTrain = []
+        self.lVal = []
+        self.lTest = []
         self.gameCount = 0
         self.pindex = -1;
 
@@ -39,13 +43,12 @@ class TicTacGame():
         print("game count =", self.gameCount)
 
     def qUpdate(self):
-        qHist=[]
+        qHist = []
         if not self.isBoardFilled() and self.XTurnToPlay:
             return;
         for i in range(len(self.gameHistory)):
             qState = []
             gState = self.gameHistory.pop()
-            print(gState)
             for gp in gState:
                 if gp == 'X':
                     qState.append((1, 0))
@@ -55,23 +58,27 @@ class TicTacGame():
                     qState.append((0, 0))
                 else:
                     qState.append((1, 1))
-            qHist.append(qState)
+            qHist = [[f for f, c in qState]
+                , [c for f, c in qState]]
+            # print(qHist[0])
+            if self.gameCount % 5 == 0 and self.gameCount % 45 != 0:
+                self.qTest.append(qHist[0])
+                self.lTest.append(qHist[1])
+            elif self.gameCount % 9 == 0:
+                self.qVal.append(qHist[0])
+                self.lVal.append(qHist[1])
+            elif self.gameCount % 5 != 0 or self.gameCount % 9 != 0:
+                self.qTrain.append(qHist[0])
+                self.lTrain.append(qHist[1])
         self.gameCount += 1
-        if self.gameCount % 5 == 0:
-            self.qTest += qHist
-        elif self.gameCount % 10 == 0:
-            self.qVal += qHist
-        else:
-            self.qTrain += qHist
-
 
     def reset(self):
         self.gameState = ["-", "-", "-", "-", "-", "-", "-", "-", "-"]
         self.XTurnToPlay = True
         self.winner = "TicTacToe Demo"
         self.windex = -1
-        self.gameHistory=[]
-        self.pindex= -1
+        self.gameHistory = []
+        self.pindex = -1
 
     def gamePlay(self):
         if self.isWinState() or self.isBoardFilled():
@@ -84,13 +91,14 @@ class TicTacGame():
             v = random.randint(0, 8)
         if self.XTurnToPlay:
             self.gameState[v] = '*'
-            #print(self.gameState)
+            # print(self.gameState)
             self.gameHistory.append([x for x in self.gameState])
             self.gameState[v] = 'X'
         else:
             self.gameState[v] = "O"
         self.XTurnToPlay = not self.XTurnToPlay
-        self.winner = (("O" if self.XTurnToPlay else "X") + " wins") if self.isWinState() else ("game was a draw" if self.isBoardFilled() else self.winner)
+        self.winner = (("O" if self.XTurnToPlay else "X") + " wins") if self.isWinState() else (
+            "game was a draw" if self.isBoardFilled() else self.winner)
         # this.testWinState();
 
     def isWinState(self):
@@ -111,10 +119,16 @@ class TicTacGame():
         sb = ""
         for i in range(3):
             for j in range(3):
-                sb += self.gameState[i * 3+j]
+                sb += self.gameState[i * 3 + j]
             print(sb)
             sb = ""
 
+    @staticmethod
+    def minibatch():
+        ttt=TicTacGame()
+        for i in range(50):
+            ttt.gameLoop()
+        return ttt.qTrain, ttt.lTrain, ttt.qVal, ttt.lVal, ttt.qTest, ttt.lTest
 
 def main():
     ttt = TicTacGame()
@@ -123,4 +137,3 @@ def main():
 
 if __name__ == '__main__':
     main()
-
