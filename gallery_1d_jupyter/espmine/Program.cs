@@ -125,11 +125,12 @@ namespace espmine
             var not_good=File.ReadAllLines($"{root}/train.log");
             var n=not_good.Length;
             Console.WriteLine($"{n} lines read");
-            if(n>0 && n%50==0)postMessage(not_good[n-1]);
+            if(n>0 && n%20==0)postMessage(not_good[n-1]);
         }catch(IOException x){
             Console.WriteLine($"{x.Message} retrying..");
             Thread.Sleep(2000);
-            this.tail();
+            if(++msg_counter==150)return;
+            tail();
         }
        }
 
@@ -137,6 +138,7 @@ namespace espmine
         private void OnChanged(object source, FileSystemEventArgs e){
             // Specify what is done when a file is changed, created, or deleted.
             Console.WriteLine($"File: {e.FullPath} {e.ChangeType}");
+            msg_counter=0;
             this.tail();
         }
         private void OnRenamed(object source, RenamedEventArgs e) =>
