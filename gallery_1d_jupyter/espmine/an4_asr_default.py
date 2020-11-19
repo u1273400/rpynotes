@@ -45,7 +45,7 @@ ESPnet depends on Kaldi ASR toolkit and Warp-CTC. This cell will take a few minu
 !chmod +x ./espnet/tools/kaldi/tools/extras/check_dependencies.sh
 !cd ./espnet/tools/kaldi/tools; make sph2pipe sclite
 !rm -rf espnet/tools/kaldi/tools/python
-![ ! -e ubuntu16-featbin.tar.gz ] && wget https://18-198329952-gh.circle-artifacts.com/0/home/circleci/repo/ubuntu16-featbin.tar.gz
+![ ! -e ubuntu16-featbin.tar.gz ] && wget https://github.com/espnet/kaldi-bin/releases/download/v0.0.2/ubuntu-latest-featbin.tar.gz
 !tar -xf ./ubuntu16-featbin.tar.gz
 !cp featbin/* espnet/tools/kaldi/src/featbin/
 

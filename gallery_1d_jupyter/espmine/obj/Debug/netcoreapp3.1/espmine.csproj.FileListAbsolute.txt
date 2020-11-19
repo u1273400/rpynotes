@@ -1,0 +1,16 @@
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.csprojAssemblyReference.cache
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.AssemblyInfoInputs.cache
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.AssemblyInfo.cs
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.csproj.CoreCompileInputs.cache
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.exe
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.deps.json
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.runtimeconfig.json
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.runtimeconfig.dev.json
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.dll
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\espmine.pdb
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.dll
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.pdb
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.genruntimeconfig.cache
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\Newtonsoft.Json.dll
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\bin\Debug\netcoreapp3.1\Slack.Webhooks.dll
+C:\Users\User\Dropbox\rtmp\src\python\notebooks\research\gallery_1d_jupyter\espmine\obj\Debug\netcoreapp3.1\espmine.csproj.CopyComplete
