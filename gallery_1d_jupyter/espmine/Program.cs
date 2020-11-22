@@ -18,6 +18,7 @@ namespace espmine
                     Arguments = $"-n 1 {root}/train.log",
                     UseShellExecute = false,
                     RedirectStandardOutput = true,
+                    RedirectStandardError = true,
                     CreateNoWindow = true
                 };
 
@@ -117,6 +118,7 @@ namespace espmine
 
             process.Start();
             process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
             return tcs.Task;
         }
 
@@ -125,12 +127,16 @@ namespace espmine
             var not_good=File.ReadAllLines($"{root}/train.log");
             var n=not_good.Length;
             Console.WriteLine($"{n} lines read");
-            if(n>0 && n%20==0)postMessage(not_good[n-1]);
+            if(n>0 && n%2==0)postMessage(not_good[n-1]);
         }catch(IOException x){
             Console.WriteLine($"{x.Message} retrying..");
             Thread.Sleep(2000);
-            if(++msg_counter==150)return;
+            if(++msg_counter==10)return;
             tail();
+        }finally{
+            Console.WriteLine("Using Tasync..");
+            RunTailAsync();
+            Thread.Sleep(200);
         }
        }
 
