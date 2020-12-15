@@ -13,15 +13,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import tensorflow as tf
-from tensorflow.contrib import layers
-from tensorflow.contrib import rnn  # rnn stuff temporarily in contrib, moving back to code in TF 1.1
+# import tensorflow as tf
+# from tensorflow.contrib import layers
+# from tensorflow.contrib import rnn  # rnn stuff temporarily in contrib, moving back to code in TF 1.1
 import os
 import time
 import math
 import numpy as np
 import my_txtutils as txt
-tf.set_random_seed(0)
+# tf.set_random_seed(0)
 
 # model parameters
 #
