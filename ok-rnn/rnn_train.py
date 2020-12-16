@@ -57,6 +57,7 @@ txt.print_data_stats(len(codetext), len(valitext), epoch_size)
 #
 # the model (see FAQ in README.md)
 #
+
 lr = tf.placeholder(tf.float32, name='lr')  # learning rate
 pkeep = tf.placeholder(tf.float32, name='pkeep')  # dropout parameter
 batchsize = tf.placeholder(tf.int32, name='batchsize')
