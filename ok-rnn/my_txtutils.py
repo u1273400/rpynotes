@@ -246,7 +246,7 @@ def read_data_files(directory, validation=True):
     bookranges = []
     shakelist = glob.glob(directory, recursive=True)
     for shakefile in shakelist:
-        shaketext = open(shakefile, encodong='utf-16')
+        shaketext = open(shakefile, encoding='utf-16')
         print("Loading file " + shakefile)
         start = len(codetext)
         codetext.extend(encode_text(shaketext.read()))
