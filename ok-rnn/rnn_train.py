@@ -135,6 +135,7 @@ sess = tf.Session()
 sess.run(init)
 step = 0
 
+
 # training loop
 for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=20):
 
