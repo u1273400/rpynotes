@@ -107,26 +107,7 @@ def train(category_tensor, line_tensor):
     return output.transpose(0,1), loss.item()
 
 # init train
-import math
 
-n_iters = 100000
-print_every = 5000
-plot_every = 1000
-
-
-
-# Keep track of losses for plotting
-current_loss = 0
-all_losses = []
-
-def timeSince(since):
-    now = time.time()
-    s = now - since
-    m = math.floor(s / 60)
-    s -= m * 60
-    return '%dm %ds' % (m, s)
-
-start = time.time()# 
 def lin2txt(lt):
     return ''.join([chr(txt.convert_to_alphabet(c))  if c != 0 else '' for c in lt])
 
@@ -180,6 +161,11 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
     if iter % plot_every == 0:
         all_losses.append(current_loss / plot_every)
         current_loss = 0
+        vali_x, vali_y, _ = next(txt.rnn_minibatch_sequencer(valitext, BATCHSIZE, VALI_SEQLEN, 1))  # all data in 1 batch
+        line_tensor = mb2t(vali_x)
+        output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
+        vloss.append(loss)
+        plt.plot(vloss)  
     iter += 1
     
 import matplotlib.pyplot as plt
