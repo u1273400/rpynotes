@@ -135,9 +135,9 @@ sess = tf.Session()
 sess.run(init)
 step = 0
 
-
+vloss=[]
 # training loop
-for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=20):
+for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=30):
 
     # train on one minibatch
     feed_dict = {X: x, Y_: y_, Hin: istate, lr: learning_rate, pkeep: dropout_pkeep, batchsize: BATCHSIZE}
@@ -166,6 +166,8 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         txt.print_validation_stats(ls, acc)
         # save validation data for Tensorboard
         validation_writer.add_summary(smm, step)
+        print(smm)
+        vloss.append(ls)
 
     # display a short text generated with the current weights and biases (every 150 batches)
     if step // 3 % _50_BATCHES == 0:
@@ -184,12 +186,19 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         saved_file = saver.save(sess, 'checkpoints/rnn_train_' + timestamp, global_step=step)
         print("Saved file: " + saved_file)
 
+
     # display progress bar
     progress.step(reset=step % _50_BATCHES == 0)
 
     # loop state around
     istate = ostate
     step += BATCHSIZE * SEQLEN
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+plt.figure()
+plt.plot(vloss)
 
 # all runs: SEQLEN = 30, BATCHSIZE = 100, ALPHASIZE = 98, INTERNALSIZE = 512, NLAYERS = 3
 # run 1477669632 decaying learning rate 0.001-0.0001-1e7 dropout 0.5: not good
