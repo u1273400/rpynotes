@@ -21,6 +21,7 @@ import time
 import math
 import numpy as np
 import my_txtutils as txt
+import json
 # tf.set_random_seed(0)
 
 # model parameters
@@ -168,13 +169,9 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         line_tensor = mb2t(vali_x)
         output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
         vloss.append(loss)
-        plt.plot(vloss)  
+        #plt.plot(vloss)
     iter += 1
     
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
-# product = reduce((lambda x, y: x * y), [1, 2, 3, 4])
-
-plt.figure()
-plt.plot(all_losses)
+with open('pytorch_train.json', 'w') as f:
+    json.dump(vloss, f)
 
