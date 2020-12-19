@@ -46,6 +46,19 @@ namespace espmine
 
 	}
         private ProcessStartInfo tailInfo  = new ProcessStartInfo
+<<<<<<< HEAD
+=======
+                {
+                    FileName = @"C:\Program Files\Git\usr\bin\tail",
+                    Arguments = $"-n 1 {root}/train.log",
+                    UseShellExecute = false,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    CreateNoWindow = true
+                };
+
+        public static void Main()
+>>>>>>> 9a6f3d0aadd3fd291e79530b6c45c3426d4b2bd6
         {
             FileName = @"/usr/bin/tail",
             Arguments = $"-n 1 {root}/train.log",
@@ -206,6 +219,7 @@ namespace espmine
 
             process.Start();
             process.BeginOutputReadLine();
+            process.BeginErrorReadLine();
             return tcs.Task;
         }
 
@@ -213,6 +227,7 @@ namespace espmine
         try{
             var not_good=File.ReadAllLines($"{log}");
             var n=not_good.Length;
+<<<<<<< HEAD
             //if(n>0 && msg_counter % 15 == 0)Console.WriteLine($"{n} lines.");
             if(n>0 && msg_counter % 60 == 0)Console.WriteLine(not_good[n-1]);
 	    if(n>0 && msg_counter % (60 * 1) == 0) await sendemail(not_good[n-1]);
@@ -222,6 +237,20 @@ namespace espmine
             Console.WriteLine($"{x.Message} retrying after 2s..");
             Thread.Sleep(2000);
 	}
+=======
+            Console.WriteLine($"{n} lines read");
+            if(n>0 && n%2==0)postMessage(not_good[n-1]);
+        }catch(IOException x){
+            Console.WriteLine($"{x.Message} retrying..");
+            Thread.Sleep(2000);
+            if(++msg_counter==10)return;
+            tail();
+        }finally{
+            Console.WriteLine("Using Tasync..");
+            RunTailAsync();
+            Thread.Sleep(200);
+        }
+>>>>>>> 9a6f3d0aadd3fd291e79530b6c45c3426d4b2bd6
        }
 
 	public string getTail(){

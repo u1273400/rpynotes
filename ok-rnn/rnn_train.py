@@ -37,7 +37,7 @@ tf.set_random_seed(0)
 #         To see the curves drift apart ("overfitting") try to use an insufficient amount of
 #         training data (shakedir = "shakespeare/t*.txt" for example)
 #
-SEQLEN = 30
+SEQLEN = 50
 BATCHSIZE = 200
 ALPHASIZE = txt.ALPHASIZE
 INTERNALSIZE = 512
@@ -46,7 +46,7 @@ learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
-shakedir = "bible/*.txt"
+shakedir = "txts/*.txt"
 #shakedir = "../tensorflow/**/*.py"
 codetext, valitext, bookranges = txt.read_data_files(shakedir, validation=True)
 
@@ -57,6 +57,7 @@ txt.print_data_stats(len(codetext), len(valitext), epoch_size)
 #
 # the model (see FAQ in README.md)
 #
+
 lr = tf.placeholder(tf.float32, name='lr')  # learning rate
 pkeep = tf.placeholder(tf.float32, name='pkeep')  # dropout parameter
 batchsize = tf.placeholder(tf.int32, name='batchsize')
@@ -134,8 +135,9 @@ sess = tf.Session()
 sess.run(init)
 step = 0
 
+vloss=[]
 # training loop
-for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=10):
+for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=30):
 
     # train on one minibatch
     feed_dict = {X: x, Y_: y_, Hin: istate, lr: learning_rate, pkeep: dropout_pkeep, batchsize: BATCHSIZE}
@@ -164,6 +166,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         txt.print_validation_stats(ls, acc)
         # save validation data for Tensorboard
         validation_writer.add_summary(smm, step)
+        vloss.append(ls)
 
     # display a short text generated with the current weights and biases (every 150 batches)
     if step // 3 % _50_BATCHES == 0:
@@ -182,12 +185,22 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         saved_file = saver.save(sess, 'checkpoints/rnn_train_' + timestamp, global_step=step)
         print("Saved file: " + saved_file)
 
+
     # display progress bar
     progress.step(reset=step % _50_BATCHES == 0)
 
     # loop state around
     istate = ostate
     step += BATCHSIZE * SEQLEN
+
+import matplotlib.pyplot as plt
+import matplotlib.ticker as ticker
+
+plt.figure()
+plt.plot(vloss)
+
+with open('vloss.json', "w") as f:
+    json.dump(vloss, f)
 
 # all runs: SEQLEN = 30, BATCHSIZE = 100, ALPHASIZE = 98, INTERNALSIZE = 512, NLAYERS = 3
 # run 1477669632 decaying learning rate 0.001-0.0001-1e7 dropout 0.5: not good
