@@ -44,6 +44,7 @@ INTERNALSIZE = 512
 NLAYERS = 3
 learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
+nb_epoch = 75
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
 shakedir = "txts/*.txt"
