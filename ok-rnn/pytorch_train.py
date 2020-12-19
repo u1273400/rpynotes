@@ -135,6 +135,7 @@ plot_every = 100
 # Keep track of losses for plotting
 current_loss = 0
 all_losses = []
+vloss = []
 iter=0
 def timeSince(since):
     now = time.time()
@@ -169,7 +170,6 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         line_tensor = mb2t(vali_x)
         output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
         vloss.append(loss)
-        #plt.plot(vloss)
     iter += 1
     
 with open('pytorch_train.json', 'w') as f:
