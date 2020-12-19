@@ -21,6 +21,8 @@ import time
 import math
 import numpy as np
 import my_txtutils as txt
+import json
+
 tf.set_random_seed(0)
 
 # model parameters
