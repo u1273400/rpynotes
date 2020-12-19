@@ -60,6 +60,7 @@ if not os.path.exists("checkpoints"):
 
 # model
 import torch.nn as nn
+import torch
 
 class GRU(nn.Module):
     def __init__(self, input_size, hidden_size, layers):
