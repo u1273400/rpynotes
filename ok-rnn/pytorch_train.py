@@ -22,6 +22,7 @@ import math
 import numpy as np
 import my_txtutils as txt
 import json
+import torch
 # tf.set_random_seed(0)
 
 # model parameters
