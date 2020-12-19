@@ -63,48 +63,62 @@ if not os.path.exists("checkpoints"):
 
 # model
 import torch.nn as nn
-import torch
 
-class GRU(nn.Module):
-    def __init__(self, input_size, hidden_size, layers):
-        super(GRU, self).__init__()
+class RNN(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(RNN, self).__init__()
 
         self.hidden_size = hidden_size
 
-        self.gru = nn.GRU(input_size, hidden_size, layers)
+        self.i2h = [nn.GRUCell(input_size, hidden_size) for i in range(NLAYERS)]
+        self.i2o = [nn.Linear(input_size + hidden_size, output_size) for i in range(NLAYERS)]
+        self.softmax = nn.LogSoftmax(dim=1)
 
     def forward(self, input, hidden):
-        # combined = torch.cat((input, hidden), 1)
-        output, hidden = self.gru(input, hidden)
+        combined = torch.cat((input, hidden), 1)
+        hidden = self.i2h[0](input,hidden)
+        output = self.i2o[0](combined)
+        for i in range(1,NLAYERS):
+            combined = torch.cat((output, hidden), 1)
+            hidden = self.i2h[i](output,hidden)
+            output = self.i2o[i](combined)
+        output = self.softmax(output)
         return output, hidden
 
     def initHidden(self):
-        return torch.zeros(NLAYERS, BATCHSIZE, self.hidden_size, device=device)
+        return torch.zeros(BATCHSIZE, self.hidden_size, device=device)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print('using gpu..' if torch.cuda.is_available() else 'using cpu..')
-gru = GRU(ALPHASIZE, INTERNALSIZE, NLAYERS)
+rnn = RNN(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
+rnn.to(device)
 
 criterion = nn.NLLLoss()
 # training fn
-learning_rate = 0.005 # If you set this too high, it might explode. If too low, it might not learn
+learning_rate = 0.005  # If you set this too high, it might explode. If too low, it might not learn
+
 
 def train(category_tensor, line_tensor):
-    hidden = gru.initHidden()
-    softmax = nn.LogSoftmax(dim=1)
-    fc_layer = nn.Linear(INTERNALSIZE, ALPHASIZE)        
-    gru.zero_grad()
-    
-    output, hidden = gru(line_tensor, hidden)
-    #print(f'gos={output.size()}, is={line_tensor.size()}')
-    output = fc_layer(output)
-    #print(f'fc={output.size()}, ls={line_tensor.size()}')
-    output = softmax(output)
-    #print(f'sm={output.size()}, cs[2:]={category_tensor.size()}')
-    input=output.transpose(0,1).transpose(1,2)
-    loss = criterion(input, category_tensor) # N (batch),C
+    hidden = rnn.initHidden()
+
+    rnn.zero_grad()
+
+    lint = []
+    for i in range(line_tensor.size()[0]):
+        output, hidden = rnn(line_tensor[i], hidden)
+        lint.append(output)
+    input = torch.stack(lint).transpose(0, 1).transpose(1, 2)
+    #     print(f'is={input.size()}, cs={category_tensor.size()}')
+    #     print(f'is[1:]={input.size()[1:]}, cs[1:]={category_tensor.size()[1:]}')
+    #     print(f'is[2:]={input.size()[2:]}, cs[2:]={category_tensor.size()[2:]}')
+    loss = criterion(input, category_tensor)
     loss.backward()
 
+    # Add parameters' gradients to their values, multiplied by learning rate
+    for p in rnn.parameters():
+        p.data.add_(p.grad.data, alpha=-learning_rate)
+
+    return torch.stack(lint).transpose(0, 1), loss.item()
     # Add parameters' gradients to their values, multiplied by learning rate
     for p in gru.parameters():
         p.data.add_(p.grad.data, alpha=-learning_rate)
@@ -124,8 +138,6 @@ def mb2t(rows):
             tensor[i][j][letter_code] = 1
     return tensor
 
-import time
-import math
 
 n_iters = 100000
 print_every = 250
@@ -171,8 +183,8 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         line_tensor = mb2t(vali_x)
         output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
         vloss.append(loss)
+        with open('pytorch_train.json', 'w') as f:
+            json.dump(vloss, f)
     iter += 1
     
-with open('pytorch_train.json', 'w') as f:
-    json.dump(vloss, f)
 
