@@ -82,6 +82,7 @@ class GRU(nn.Module):
         return torch.zeros(NLAYERS, BATCHSIZE, self.hidden_size, device=device)
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+print('using gpu..' if torch.cuda.is_available() else 'using cpu..')
 gru = GRU(ALPHASIZE, INTERNALSIZE, NLAYERS)
 
 criterion = nn.NLLLoss()
