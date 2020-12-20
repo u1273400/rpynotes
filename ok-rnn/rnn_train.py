@@ -182,7 +182,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
             eta = (nb_epoch - epoch) / speed
             sspeed = speed * 60 * 60
             seta = str(datetime.timedelta(seconds=int(eta)))
-            mystats = f'average batch rate / hr = %3.2f,  eta = {seta}, elapsed = {tss}' % (sspeed)
+            mystats = f'average batch rate / hr = %3.2f,  eta = {seta}, elapsed = {tss} [{epoch}/{nb_epoch} epochs]' % (sspeed)
         else:
             mystats = 'estimating eta..'
         print(mystats)

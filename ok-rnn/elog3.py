@@ -78,7 +78,7 @@ root = './'
 log = f'{root}ok201220.log'
 myurl = "https://hooks.slack.com/services/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"
 
-kfiles = ['vloss.json']
+kfiles = ['vloss_main.json']
 
 sender, to, subject, message_text, file = (
     'ESPNet Research',
