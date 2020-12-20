@@ -138,6 +138,7 @@ sess.run(init)
 step = 0
 
 vloss=[]
+vacc=[]
 # training loop
 for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=70):
 
@@ -169,6 +170,10 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         # save validation data for Tensorboard
         validation_writer.add_summary(smm, step)
         vloss.append(ls)
+        vacc.append(acc)
+        with open('vloss.json', "w") as f:
+            lstats = {'acc': vacc, 'loss': vloss}
+            json.dump(lstats, f)
 
     # display a short text generated with the current weights and biases (every 150 batches)
     if step // 3 % _50_BATCHES == 0:
@@ -195,14 +200,12 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
     istate = ostate
     step += BATCHSIZE * SEQLEN
 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+# import matplotlib.pyplot as plt
+# import matplotlib.ticker as ticker
+#
+# plt.figure()
+# plt.plot(vloss)
 
-plt.figure()
-plt.plot(vloss)
-
-with open('vloss.json', "w") as f:
-    json.dump(vloss, f)
 
 # all runs: SEQLEN = 30, BATCHSIZE = 100, ALPHASIZE = 98, INTERNALSIZE = 512, NLAYERS = 3
 # run 1477669632 decaying learning rate 0.001-0.0001-1e7 dropout 0.5: not good

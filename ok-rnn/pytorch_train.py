@@ -79,7 +79,7 @@ class RNN(nn.Module):
         combined = torch.cat((input, hidden), 1)
         hidden = self.i2h[0](input,hidden)
         output = self.i2o[0](combined)
-        for i in range(1,NLAYERS):
+        for i in range(1, NLAYERS):
             combined = torch.cat((output, hidden), 1)
             hidden = self.i2h[i](output,hidden)
             output = self.i2o[i](combined)
@@ -95,7 +95,8 @@ rnn = RNN(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
 rnn.to(device)
 
 criterion = nn.NLLLoss()
-# training fn
+
+# train_fn
 learning_rate = 0.005  # If you set this too high, it might explode. If too low, it might not learn
 
 
@@ -139,17 +140,15 @@ def mb2t(rows):
             tensor[i][j][letter_code] = 1
     return tensor
 
-
-n_iters = 100000
+#training
 print_every = 250
 plot_every = 100
 
-
+vloss = []
 
 # Keep track of losses for plotting
 current_loss = 0
 all_losses = []
-vloss = []
 iter=0
 def timeSince(since):
     now = time.time()
@@ -173,19 +172,28 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
     if iter % print_every == 0:
         guess = [lin2txt([ch.argmax(dim=0) for ch in line]) for line in output]
         for i in range(2):
-            correct = '✓' if guess[i] == category[i] else '✗ %s' % category[i] 
-            print('epoch %d of  %d (%s) %.4f %s / %s %s' % (epoch, nb_epoch, timeSince(start), loss, lines[i], guess[0], correct))
+            elapsed_time = time.time() - start
+            tss = str(datetime.timedelta(seconds=elapsed_time)) # time since start string
+            if epoch > 0:
+                speed = epoch/elapsed_time
+                eta = (nb_epoch-epoch)/speed
+                sspeed = speed*60*60
+                seta = str(datetime.timedelta(seconds=int(eta)))
+                stats = f'average batch rate per hr = %3.2f,  eta = {seta}'%(sspeed)
+            else:
+                stats ='calculating stats..'
+            correct = '✓' if guess[i] == category[i] else '✗ %s' % stats
+            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch, nb_epoch, tss, loss, lines[i], guess[0], correct))
 
     # Add current loss avg to list of losses
-    if iter % plot_every == 0:
+    if iter % plot_every == 0 and len(valitext) > 0:
         all_losses.append(current_loss / plot_every)
         current_loss = 0
         vali_x, vali_y, _ = next(txt.rnn_minibatch_sequencer(valitext, BATCHSIZE, VALI_SEQLEN, 1))  # all data in 1 batch
         line_tensor = mb2t(vali_x)
         output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
         vloss.append(loss)
-        with open('pytorch_train.json', 'w') as f:
-            json.dump(vloss, f)
+        with open('vloss.json', 'w') as f:
+            loss_data={'vloss':vloss, 'tloss':all_losses}
+            json.dump(loss_data, f)
     iter += 1
-    
-
