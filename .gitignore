@@ -9,6 +9,7 @@
 **/*.iml
 
 **/Debug/
+**/obj/
 
 *.key
 .nsml*
