@@ -173,7 +173,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         vacc.append(acc)
         with open('vloss.json', "w") as f:
             lstats = {'acc': vacc, 'loss': vloss}
-            json.dump(lstats, f)
+            json.dump(str(lstats), f)
 
     # display a short text generated with the current weights and biases (every 150 batches)
     if step // 3 % _50_BATCHES == 0:

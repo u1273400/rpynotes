@@ -70,8 +70,8 @@ SCOPES = ['https://mail.google.com/']
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
 interval_hrs = 4
-dint_min = 5
-log_lines = 25
+dint_min = 50
+log_lines = 250
 display_lines = 15
 
 root = './'
@@ -188,6 +188,7 @@ def send_message(service, user_id, message):
 
 def tail(n):
     process = Popen(["tail", f"-n {n}", f"{log}"], stdout=PIPE)
+    #process = Popen(["type", f"{log}"], stdout=PIPE)
     (output, err) = process.communicate()
     _ = process.wait()
     return err.decode('utf-8') if err is not None else output.decode('utf-8')
@@ -212,7 +213,7 @@ def main():
             output = tail(display_lines)
             print(output)
         if c % (60 * 60 * interval_hrs) == 0:
-            msg = df() + '\n' + tail(log_lines)
+            msg = tail(log_lines)
             dayx = int(c/(60 * 60 * 24))
             msg = create_message_with_attachment(sender, to, f'{subject} (Day {dayx})', msg, file)
             send_message(service, 'me', msg)
