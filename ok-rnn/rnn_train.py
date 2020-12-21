@@ -187,7 +187,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
             mystats = 'estimating eta..'
         print(mystats)
         with open('vloss_main.json', "w") as f:
-            lstats = {'acc': vacc, 'loss': vloss}
+            lstats = {"acc": vacc, "loss": vloss}
             json.dump(str(lstats), f)
 
     # display a short text generated with the current weights and biases (every 150 batches)
