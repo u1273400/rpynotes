@@ -1,0 +1,1321 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+    }
+   },
+   "outputs": [],
+   "source": [
+    "import pandas as pd\n",
+    "import numpy as np\n",
+    "import tensorflow as tf\n",
+    "import my_txtutils\n",
+    "import re\n",
+    "import nltk\n",
+    "mypath='./new_txts/'\n",
+    "txts='./txts/'"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "['acts_new.txt', 'gal_eph_new.txt', 'heb_new.txt', 'jam_jud_new.txt', 'john_new.txt', 'jud_rev_new.txt', 'luke_8_john_new.txt', 'mark01_new.txt', 'matt02_new.txt', 'matt_new.txt', 'phil_col_new.txt', 'thes_tim_new.txt', 'tit_phl_new.txt']\n"
+     ]
+    }
+   ],
+   "source": [
+    "from os import listdir\n",
+    "from os.path import isfile, join\n",
+    "onlyfiles = [f for f in listdir(txts) if isfile(join(txts, f))]\n",
+    "print(onlyfiles)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "jupyter": {
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "311 lines written\n"
+     ]
+    }
+   ],
+   "source": [
+    "#large files\n",
+    "def large_f():\n",
+    "    #filenames = ['file1.txt', 'file2.txt', ...]\n",
+    "    with open(mypath+'full.txt', 'w') as outfile:\n",
+    "        for fname in onlyfiles:\n",
+    "            with open(fname) as infile:\n",
+    "                for line in infile:\n",
+    "                    outfile.write(line)\n",
+    "#large files\n",
+    "def decimate_f(f):\n",
+    "    #filenames = ['file1.txt', 'file2.txt', ...]\n",
+    "    with open(mypath+'tmp.txt', 'w') as outfile:\n",
+    "        with open(mypath+f) as infile:\n",
+    "            lc=0\n",
+    "            for line in infile:\n",
+    "                wrap=False\n",
+    "                cx=0\n",
+    "                tmp=\"\"\n",
+    "                for i in line:\n",
+    "                    wrap=True if cx>99 else False\n",
+    "                    if (wrap==True and i==' '):\n",
+    "                        tmp+='\\n'\n",
+    "                        cx=-1\n",
+    "                    else:\n",
+    "                        tmp+=i\n",
+    "                    cx+=1\n",
+    "                outfile.write(tmp)\n",
+    "                lc+=1\n",
+    "    print(lc,'lines written')\n",
+    "decimate_f('full.txt')"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+<<<<<<< HEAD
+     "outputs_hidden": true
+=======
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [],
+   "source": [
+    "#small files\n",
+    "def small_f():\n",
+    "    #filenames = ['file1.txt', 'file2.txt', ...]\n",
+    "    with open(mypath+'full.txt', 'w') as outfile:\n",
+    "        for fname in onlyfiles:\n",
+    "            print('writing file',fname)\n",
+    "            with open(txts+fname) as infile:\n",
+    "                outfile.write(infile.read())\n",
+    "    return open(mypath+\"full.txt\").read()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "writing file acts_new.txt\n",
+      "writing file gal_eph_new.txt\n",
+      "writing file heb_new.txt\n",
+      "writing file jam_jud_new.txt\n",
+      "writing file john_new.txt\n",
+      "writing file jud_rev_new.txt\n",
+      "writing file luke_8_john_new.txt\n",
+      "writing file mark01_new.txt\n",
+      "writing file matt02_new.txt\n",
+      "writing file matt_new.txt\n",
+      "writing file phil_col_new.txt\n",
+      "writing file thes_tim_new.txt\n",
+      "writing file tit_phl_new.txt\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "649190"
+      ]
+     },
+     "execution_count": 24,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "txt=small_f()\n",
+    "words=re.sub(' +', ' ',txt.replace('\\n',' ')).split(' ')\n",
+    "len(words)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "jupyter": {
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "6507438"
+      ]
+     },
+     "execution_count": 25,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "len(txt)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "INFO:tensorflow:Restoring parameters from checkpoints/rnn_train_1563814502-18000000\n",
+      "\u0000O\u0000D\u0000D\u0000,\u0000 \u0000a\u0000n\u0000d\u0000 \u0000s\u0000a\u0000i\u0000d\u0000,\u0000 \u0000I\u0000 \u0000w\u0000i\u0000l\u0000l\u0000 \u0000s\u0000a\u0000y\u0000 \u0000u\u0000n\u0000t\u0000o\u0000 \u0000h\u0000i\u0000s\u0000 \u0000s\u0000o\u0000n\u0000,\u0000 \u0000T\u0000h\u0000o\u0000u\u0000 \u0000s\u0000h\u0000a\u0000l\u0000t\n",
+      "\u0000 \u0000n\u0000o\u0000t\u0000 \u0000b\u0000e\u0000 \u0000s\u0000a\u0000v\u0000e\u0000d\u0000,\u0000 \u0000t\u0000h\u0000a\u0000t\u0000 \u0000I\u0000 \u0000s\u0000a\u0000y\u0000 \u0000u\u0000n\u0000t\u0000o\u0000 \u0000t\u0000h\u0000e\u0000m\u0000,\u0000 \u0000W\u0000e\u0000 \u0000h\u0000a\u0000v\u0000e\u0000 \u0000c\u0000o\u0000n\u0000s\u0000u\n",
+      "\u0000m\u0000e\u0000d\u0000 \u0000m\u0000y\u0000 \u0000f\u0000a\u0000t\u0000h\u0000e\u0000r\u0000,\u0000 \u0000a\u0000n\u0000d\u0000 \u0000t\u0000h\u0000e\u0000 \u0000m\u0000i\u0000g\u0000h\u0000t\u0000y\u0000 \u0000m\u0000a\u0000n\u0000 \u0000t\u0000h\u0000a\u0000t\u0000 \u0000s\u0000h\u0000a\u0000l\u0000l\u0000 \u0000b\u0000e\u0000 \u0000u\u0000n\n",
+      "\u0000c\u0000l\u0000e\u0000a\u0000n\u0000 \u0000u\u0000n\u0000t\u0000o\u0000 \u0000h\u0000i\u0000m\u0000,\u0000 \u0000a\u0000n\u0000d\u0000 \u0000t\u0000h\u0000e\u0000 \u0000L\u0000O\u0000R\u0000D\u0000 \u0000h\u0000a\u0000t\u0000h\u0000 \u0000s\u0000a\u0000i\u0000d\u0000,\u0000 \u0000I\u0000 \u0000w\u0000i\u0000l\u0000l\u0000 \u0000p\u0000r\u0000o\n",
+      "\u0000v\u0000o\u0000k\u0000e\u0000 \u0000m\u0000e\u0000 \u0000t\u0000o\u0000 \u0000m\u0000e\u0000,\u0000 \u0000a\u0000n\u0000d\u0000 \u0000t\u0000h\u0000e\u0000 \u0000r\u0000e\u0000m\u0000e\u0000m\u0000b\u0000r\u0000i\u0000n\u0000g\u0000 \u0000o\u0000f\u0000 \u0000t\u0000h\u0000e\u0000 \u0000c\u0000h\u0000i\u0000l\u0000d\u0000r\u0000e\u0000n\u0000 \n",
+      "\u0000o\u0000f\u0000 \u0000I\u0000s\u0000r\u0000a\u0000e\u0000l\u0000 \u0000s\u0000a\u0000w\u0000 \u0000t\u0000h\u0000e\u0000 \u0000L\u0000O\u0000R\u0000D\u0000,\u0000 \u0000t\u0000h\u0000e\u0000 \u0000L\u0000O\u0000R\u0000D\u0000 \u0000s\u0000p\u0000o\u0000k\u0000e\u0000n\u0000 \u0000u\u0000n\u0000t\u0000o\u0000 \u0000h\u0000e\u0000r\u0000,\u0000 \n",
+      "\u0000T\u0000h\u0000e\u0000 \u0000L\u0000O\u0000R\u0000D\u0000 \u0000s\u0000h\u0000a\u0000l\u0000l\u0000 \u0000s\u0000a\u0000y\u0000,\u0000 \u0000T\u0000h\u0000e\u0000r\u0000e\u0000f\u0000o\u0000r\u0000e\u0000 \u0000s\u0000h\u0000a\u0000l\u0000l\u0000 \u0000t\u0000h\u0000e\u0000y\u0000 \u0000s\u0000a\u0000y\u0000 \u0000u\u0000n\u0000t\u0000o\u0000 \n",
+      "\u0000h\u0000i\u0000m\u0000,\u0000 \u0000W\u0000h\u0000o\u0000 \u0000h\u0000a\u0000v\u0000e\u0000 \u0000s\u0000e\u0000t\u0000 \u0000m\u0000e\u0000 \u0000t\u0000o\u0000 \u0000p\u0000a\u0000s\u0000s\u0000 \u0000t\u0000o\u0000 \u0000t\u0000h\u0000e\u0000 \u0000w\u0000i\u0000l\u0000l\u0000 \u0000o\u0000f\u0000 \u0000t\u0000h\u0000e\u0000 \u0000s\u0000e\n",
+      "\u0000a\u0000 \u0000t\u0000h\u0000e\u0000r\u0000e\u0000o\u0000f\u0000,\u0000 \u0000t\u0000h\u0000e\u0000n\u0000 \u0000s\u0000a\u0000y\u0000 \u0000t\u0000h\u0000e\u0000 \u0000L\u0000O\u0000R\u0000D\u0000 \u0000t\u0000h\u0000e\u0000 \u0000G\u0000o\u0000d\u0000 \u0000o\u0000f\u0000 \u0000I\u0000s\u0000r\u0000a\u0000e\u0000l\u0000,\u0000 \u0000I\u0000 \n",
+      "\u0000p\u0000r\u0000a\u0000y\u0000 \u0000y\u0000o\u0000u\u0000,\u0000 \u0000t\u0000o\u0000 \u0000s\u0000e\u0000e\u0000 \u0000m\u0000y\u0000 \u0000s\u0000e\u0000r\u0000v\u0000a\u0000n\u0000t\u0000s\u0000 \u0000t\u0000h\u0000a\u0000t\u0000 \u0000w\u0000a\u0000s\u0000 \u0000a\u0000 \u0000s\u0000t\u0000r\u0000a\u0000n\u0000g\u0000e\u0000r\u0000 \u0000t\n"
+     ]
+    }
+   ],
+   "source": [
+    "# these must match what was saved !\n",
+    "ALPHASIZE = my_txtutils.ALPHASIZE\n",
+    "NLAYERS = 3\n",
+    "INTERNALSIZE = 512\n",
+    "\n",
+    "ok02 =\"checkpoints/rnn_train_1560839489-30000000\" # okrika 2019-06-18\n",
+    "ok03 =\"checkpoints/rnn_train_1563601394-60000000\" # okrika 2019-07-20\n",
+    "bb01 =\"checkpoints/rnn_train_1563814502-18000000\" # bible 2019-07-22\n",
+    "\n",
+    "author=ok03\n",
+    "\n",
+    "ncnt = 0\n",
+    "with tf.Session() as sess:\n",
+    "    # new_saver = tf.train.import_meta_graph('checkpoints/rnn_train_1512567262-0.meta')\n",
+    "    new_saver = tf.train.import_meta_graph(author+'.meta')\n",
+    "    new_saver.restore(sess, author)\n",
+    "    x = my_txtutils.convert_from_alphabet(ord(\"L\"))\n",
+    "    x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "\n",
+    "    # initial values\n",
+    "    y = x\n",
+    "    h = np.zeros([1, INTERNALSIZE * NLAYERS], dtype=np.float32)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]\n",
+    "    for i in range(1000):\n",
+    "        yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})\n",
+    "        #print(tf.shape(yo))\n",
+    "        #print(len(yo))\n",
+    "        c = my_txtutils.sample_from_probabilities(yo, topn=2)\n",
+    "        y = np.array([[c]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "        c = chr(my_txtutils.convert_to_alphabet(c))\n",
+    "        print(c, end=\"\")\n",
+    "        if c == '\\n':\n",
+    "            ncnt = 0\n",
+    "        else:\n",
+    "            ncnt += 1\n",
+    "        if ncnt == 100:\n",
+    "            print(\"\")\n",
+    "            ncnt = 0\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "jupyter": {
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [],
+   "source": [
+    "def pcx(txt):\n",
+    "    # these must match what was saved !\n",
+    "    ALPHASIZE = my_txtutils.ALPHASIZE\n",
+    "    NLAYERS = 3\n",
+    "    INTERNALSIZE = 512\n",
+    "\n",
+    "    ok02 =\"checkpoints/rnn_train_1560839489-30000000\" # okrika 2019-06-18\n",
+    "    ok03 =\"checkpoints/rnn_train_1563601394-60000000\" # okrika 2019-07-20\n",
+    "\n",
+    "    author=ok03\n",
+    "\n",
+    "    ncnt = 0\n",
+    "    with tf.Session() as sess:\n",
+    "        # new_saver = tf.train.import_meta_graph('checkpoints/rnn_train_1512567262-0.meta')\n",
+    "        new_saver = tf.train.import_meta_graph(author+'.meta')\n",
+    "        new_saver.restore(sess, author)\n",
+    "        x = my_txtutils.convert_from_alphabet(ord(txt[0]))\n",
+    "        x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "\n",
+    "        # initial values\n",
+    "        y = x\n",
+    "        h = np.zeros([1, INTERNALSIZE * NLAYERS], dtype=np.float32)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]\n",
+    "        arr=[]\n",
+    "        for i in range(len(txt)-1):\n",
+    "            yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})\n",
+    "            c = my_txtutils.convert_from_alphabet(ord(txt[i+1]))\n",
+    "            d = my_txtutils.sample_from_probabilities(yo, topn=1)\n",
+    "            d = chr(my_txtutils.convert_to_alphabet(d))\n",
+    "            y = np.array([[c]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "            y1=np.reshape(yo,[ALPHASIZE,-1])\n",
+    "            y1=y1.flatten()\n",
+    "            #c = chr(my_txtutils.convert_to_alphabet(i))\n",
+    "            print(txt[i],':',c,':',y1[c],',max=',np.max(y1),\"='%s' or %s\"%(chr(my_txtutils.convert_to_alphabet(np.argmax(y1))),d))\n",
+    "            arr.append(y1[c])\n",
+    "    return np.log2(np.sum(arr))*(-1/len(txt))\n",
+    "    #return np.prod(arr))**(-1/len(txt)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "d : 87 : 0.0 ,max= 0.0770766 ='\u0000' or \u0000\n",
+      "u : 77 : 0.0 ,max= 0.895978 ='\u0000' or \u0000\n",
+      "k : 81 : 0.0 ,max= 0.5329333 =' ' or  \n",
+      "o : 2 : 0.0 ,max= 0.99995935 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.36144635 ='m' or m\n",
+      "i : 80 : 0.0 ,max= 0.9999676 ='\u0000' or \u0000\n",
+      "n : 75 : 0.0 ,max= 0.18348454 =' ' or  \n",
+      "i : 2 : 0.0 ,max= 0.9999759 ='\u0000' or \u0000\n",
+      "  : 82 : 0.0 ,max= 0.7913743 =' ' or  \n",
+      "p : 75 : 0.0 ,max= 0.9995127 ='\u0000' or \u0000\n",
+      "i : 84 : 0.0 ,max= 0.46761307 ='i' or i\n",
+      "r : 75 : 0.0 ,max= 0.9997508 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.76876736 ='i' or i\n",
+      "  : 85 : 0.0 ,max= 0.9999703 ='\u0000' or \u0000\n",
+      "s : 71 : 0.0 ,max= 0.30323997 ='s' or s\n",
+      "e : 2 : 0.0 ,max= 0.9999521 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.41298324 ='r' or r\n",
+      "i : 2 : 0.0 ,max= 0.9999945 ='\u0000' or \u0000\n",
+      "  : 70 : 0.0 ,max= 0.27091473 =' ' or  \n",
+      "d : 87 : 0.0 ,max= 0.9999479 ='\u0000' or \u0000\n",
+      "u : 77 : 0.0 ,max= 0.35302648 ='a' or a\n",
+      "k : 81 : 0.0 ,max= 0.9999987 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.33377552 ='i' or i\n",
+      "  : 81 : 0.0 ,max= 0.99999106 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.47501603 ='b' or b\n",
+      "  : 82 : 0.0 ,max= 0.9999926 ='\u0000' or \u0000\n",
+      "p : 75 : 0.0 ,max= 0.28767368 =' ' or  \n",
+      "i : 84 : 0.0 ,max= 0.9999404 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.3008417 =' ' or  \n",
+      "i : 67 : 0.0 ,max= 0.9999658 ='\u0000' or \u0000\n",
+      "a : 68 : 0.0 ,max= 0.2757073 =' ' or  \n",
+      "b : 71 : 0.0 ,max= 0.9999896 ='\u0000' or \u0000\n",
+      "e : 14 : 0.0 ,max= 0.7234813 ='i' or i\n",
+      ", : 2 : 0.0 ,max= 0.9999994 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.9640559 =' ' or  \n",
+      "o : 2 : 0.0 ,max= 0.9999974 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.33233953 =' ' or  \n",
+      "b : 81 : 0.0 ,max= 0.9999963 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.43369696 ='u' or u\n",
+      "  : 79 : 0.0 ,max= 0.9999993 ='\u0000' or \u0000\n",
+      "m : 75 : 0.0 ,max= 0.1528794 ='b' or b\n",
+      "i : 80 : 0.0 ,max= 0.9999993 ='\u0000' or \u0000\n",
+      "n : 71 : 0.0 ,max= 0.73959076 ='n' or n\n",
+      "e : 67 : 0.0 ,max= 0.9999671 ='\u0000' or \u0000\n",
+      "a : 2 : 0.7683277 ,max= 0.7683277 =' ' or  \n",
+      "  : 68 : 0.0 ,max= 0.9998957 ='\u0000' or \u0000\n",
+      "b : 97 : 0.0 ,max= 0.15093206 ='o' or o\n",
+      "\n",
+      " : 87 : 0.0 ,max= 0.9998977 ='\u0000' or \u0000\n",
+      "u : 2 : 0.0 ,max= 0.3905577 ='a' or a\n",
+      "  : 70 : 0.0 ,max= 0.99976176 ='\u0000' or \u0000\n",
+      "d : 67 : 0.0 ,max= 0.20302667 ='b' or b\n",
+      "a : 82 : 0.0 ,max= 0.9989875 ='\u0000' or \u0000\n",
+      "p : 87 : 0.0 ,max= 0.20240162 =' ' or  \n",
+      "u : 2 : 0.0 ,max= 0.9994692 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.394424 =' ' or  \n",
+      "o : 84 : 0.0 ,max= 0.9660501 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.27253944 =' ' or  \n",
+      "i : 2 : 0.0 ,max= 0.9983814 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.20389839 =' ' or  \n",
+      "o : 84 : 0.0 ,max= 0.9987758 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.12580791 ='m' or m\n",
+      "i : 67 : 0.0 ,max= 0.9999968 ='\u0000' or \u0000\n",
+      "a : 2 : 0.3890029 ,max= 0.3890029 =' ' or  \n",
+      "  : 81 : 0.0 ,max= 0.99986064 ='\u0000' or \u0000\n",
+      "o : 77 : 0.0 ,max= 0.19044419 ='m' or m\n",
+      "k : 89 : 0.0 ,max= 0.999653 ='\u0000' or \u0000\n",
+      "w : 71 : 0.0 ,max= 0.40168312 ='o' or o\n",
+      "e : 75 : 0.0 ,max= 0.9999758 ='\u0000' or \u0000\n",
+      "i : 80 : 0.0 ,max= 0.4690729 ='r' or r\n",
+      "n : 79 : 0.0 ,max= 0.99999845 ='\u0000' or \u0000\n",
+      "m : 67 : 0.0 ,max= 0.72179997 ='g' or g\n",
+      "a : 2 : 0.0 ,max= 0.99999154 ='\u0000' or \u0000\n",
+      "  : 82 : 0.0 ,max= 0.2567173 =' ' or  \n",
+      "p : 75 : 0.0 ,max= 0.99996686 ='\u0000' or \u0000\n",
+      "i : 77 : 0.0 ,max= 0.82402116 ='u' or u\n",
+      "k : 75 : 0.0 ,max= 0.9999893 ='\u0000' or \u0000\n",
+      "i : 2 : 0.37237903 ,max= 0.37237903 =' ' or  \n",
+      "  : 80 : 0.0 ,max= 0.9998888 ='\u0000' or \u0000\n",
+      "n : 71 : 0.0 ,max= 0.5010316 ='m' or m\n",
+      "e : 79 : 0.0 ,max= 0.9999645 ='\u0000' or \u0000\n",
+      "m : 75 : 0.0 ,max= 0.45261627 ='r' or r\n",
+      "i : 77 : 0.0 ,max= 0.99999046 ='\u0000' or \u0000\n",
+      "k : 67 : 0.0 ,max= 0.2896652 =' ' or  \n",
+      "a : 85 : 0.0 ,max= 0.99999356 ='\u0000' or \u0000\n",
+      "s : 71 : 0.0 ,max= 0.43279073 =' ' or  \n",
+      "e : 2 : 0.0 ,max= 0.99999547 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.5491153 =' ' or  \n",
+      "b : 71 : 0.0 ,max= 0.9999918 ='\u0000' or \u0000\n",
+      "e : 84 : 0.0 ,max= 0.57483745 ='e' or e\n",
+      "r : 71 : 0.0 ,max= 0.999997 ='\u0000' or \u0000\n",
+      "e : 80 : 0.0 ,max= 0.6394362 ='a' or a\n",
+      "n : 75 : 0.0 ,max= 0.9999832 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.56241286 ='h' or h\n",
+      "  : 80 : 0.0 ,max= 0.9998317 ='\u0000' or \u0000\n",
+      "n : 91 : 0.0 ,max= 0.4847284 ='a' or a\n",
+      "y : 67 : 0.0 ,max= 0.9999788 ='\u0000' or \u0000\n",
+      "a : 80 : 0.0 ,max= 0.40460557 ='e' or e\n",
+      "n : 97 : 0.0 ,max= 0.99999535 ='\u0000' or \u0000\n",
+      "\n",
+      " : 67 : 0.0 ,max= 0.39159673 =' ' or  \n",
+      "a : 2 : 0.0 ,max= 0.9999807 ='\u0000' or \u0000\n",
+      "  : 67 : 0.0 ,max= 0.62581724 =' ' or  \n",
+      "a : 82 : 0.0 ,max= 0.9999558 ='\u0000' or \u0000\n",
+      "p : 87 : 0.0 ,max= 0.3257671 ='n' or n\n",
+      "u : 2 : 0.0 ,max= 0.9999362 ='\u0000' or \u0000\n",
+      "  : 79 : 0.0 ,max= 0.6868968 =' ' or  \n",
+      "m : 67 : 0.0 ,max= 0.99984276 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.68489623 ='a' or a\n",
+      "  : 82 : 0.0 ,max= 0.9999931 ='\u0000' or \u0000\n",
+      "p : 75 : 0.0 ,max= 0.22154918 ='n' or n\n",
+      "i : 84 : 0.0 ,max= 0.99998546 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.4050046 ='n' or n\n",
+      "i : 2 : 0.0 ,max= 0.99995816 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.22340289 ='i' or i\n",
+      "o : 77 : 0.0 ,max= 0.9999919 ='\u0000' or \u0000\n",
+      "k : 87 : 0.0 ,max= 0.36484393 =' ' or  \n",
+      "u : 79 : 0.0 ,max= 0.9999951 ='\u0000' or \u0000\n",
+      "m : 67 : 0.0 ,max= 0.24932306 =' ' or  \n",
+      "a : 14 : 0.0 ,max= 0.9997503 ='\u0000' or \u0000\n",
+      ", : 2 : 0.830574 ,max= 0.830574 =' ' or  \n",
+      "  : 81 : 0.0 ,max= 0.9999783 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.20253976 ='o' or o\n",
+      "  : 80 : 0.0 ,max= 0.9999206 ='\u0000' or \u0000\n",
+      "n : 89 : 0.0 ,max= 0.2035926 ='i' or i\n",
+      "w : 81 : 0.0 ,max= 0.9999949 ='\u0000' or \u0000\n",
+      "o : 85 : 0.0 ,max= 0.59304535 ='o' or o\n",
+      "s : 71 : 0.0 ,max= 0.9999771 ='\u0000' or \u0000\n",
+      "e : 2 : 0.6903832 ,max= 0.6903832 =' ' or  \n",
+      "  : 75 : 0.0 ,max= 0.99992085 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.31727153 ='c' or c\n",
+      "  : 68 : 0.0 ,max= 0.9985154 ='\u0000' or \u0000\n",
+      "b : 71 : 0.0 ,max= 0.2626055 ='c' or c\n",
+      "e : 79 : 0.0 ,max= 0.9993936 ='\u0000' or \u0000\n",
+      "m : 71 : 0.0 ,max= 0.20272076 ='n' or n\n",
+      "e : 14 : 0.0 ,max= 0.9999459 ='\u0000' or \u0000\n",
+      ", : 2 : 0.76757026 ,max= 0.76757026 =' ' or  \n",
+      "  : 75 : 0.0 ,max= 0.99991643 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.1375343 ='a' or a\n",
+      "  : 70 : 0.0 ,max= 0.99470216 ='\u0000' or \u0000\n",
+      "d : 87 : 0.0 ,max= 0.24542871 ='\u0000' or \u0000\n",
+      "u : 77 : 0.0 ,max= 0.86494493 ='\u0000' or \u0000\n",
+      "k : 81 : 0.0 ,max= 0.95343757 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.37469205 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.99131536 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.15690742 ='o' or o\n",
+      "  : 82 : 0.0 ,max= 0.9997259 ='\u0000' or \u0000\n",
+      "p : 75 : 0.0 ,max= 0.1310464 ='y' or y\n",
+      "i : 84 : 0.0 ,max= 0.9995223 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.32862303 ='n' or n\n",
+      "i : 97 : 0.0 ,max= 0.9999695 ='\u0000' or \u0000\n",
+      "\n",
+      " : 67 : 0.0 ,max= 0.41441256 =' ' or  \n",
+      "a : 68 : 0.0 ,max= 0.9999385 ='\u0000' or \u0000\n",
+      "b : 71 : 0.0 ,max= 0.46816397 =' ' or  \n",
+      "e : 2 : 0.0 ,max= 0.9999989 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.40990648 =' ' or  \n",
+      "i : 91 : 0.0 ,max= 0.99999166 ='\u0000' or \u0000\n",
+      "y : 67 : 0.0 ,max= 0.27735585 =' ' or  \n",
+      "a : 2 : 0.0 ,max= 0.9999565 ='\u0000' or \u0000\n",
+      "  : 67 : 0.0 ,max= 0.65746295 =' ' or  \n",
+      "a : 80 : 0.0 ,max= 0.99954396 ='\u0000' or \u0000\n",
+      "n : 75 : 0.0 ,max= 0.43932778 ='y' or y\n",
+      "i : 2 : 0.0 ,max= 0.99998224 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.18189481 =' ' or  \n",
+      "i : 80 : 0.0 ,max= 0.99999774 ='\u0000' or \u0000\n",
+      "n : 71 : 0.0 ,max= 0.48262936 =' ' or  \n",
+      "e : 70 : 0.0 ,max= 0.99996233 ='\u0000' or \u0000\n",
+      "d : 67 : 0.0 ,max= 0.21281175 ='m' or m\n",
+      "a : 2 : 0.0 ,max= 0.9999223 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.23518454 ='y' or y\n",
+      "o : 2 : 0.0 ,max= 0.99999344 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.26487812 ='y' or y\n",
+      "b : 67 : 0.0 ,max= 0.9999864 ='\u0000' or \u0000\n",
+      "a : 84 : 0.0 ,max= 0.6690228 ='i' or i\n",
+      "r : 67 : 0.0 ,max= 0.9999943 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.8191426 ='a' or a\n",
+      "  : 68 : 0.0 ,max= 0.9999255 ='\u0000' or \u0000\n",
+      "b : 75 : 0.0 ,max= 0.4139106 ='a' or a\n",
+      "i : 67 : 0.0 ,max= 0.99999917 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.47657347 ='a' or a\n",
+      "  : 81 : 0.0 ,max= 0.9999989 ='\u0000' or \u0000\n",
+      "o : 77 : 0.0 ,max= 0.34847048 ='m' or m\n",
+      "k : 89 : 0.0 ,max= 0.9999479 ='\u0000' or \u0000\n",
+      "w : 71 : 0.0 ,max= 0.38393041 ='o' or o\n",
+      "e : 75 : 0.0 ,max= 0.9999912 ='\u0000' or \u0000\n",
+      "i : 80 : 0.40985736 ,max= 0.40985736 ='n' or n\n",
+      "n : 79 : 0.0 ,max= 0.99999857 ='\u0000' or \u0000\n",
+      "m : 67 : 0.0 ,max= 0.39466068 ='g' or g\n",
+      "a : 2 : 0.0 ,max= 0.9999976 ='\u0000' or \u0000\n",
+      "  : 80 : 0.0 ,max= 0.19131877 =' ' or  \n",
+      "n : 89 : 0.0 ,max= 0.9999951 ='\u0000' or \u0000\n",
+      "w : 81 : 0.0 ,max= 0.28597087 =' ' or  \n",
+      "o : 2 : 0.0 ,max= 0.99996424 ='\u0000' or \u0000\n",
+      "  : 70 : 0.0 ,max= 0.34404218 =' ' or  \n",
+      "d : 87 : 0.0 ,max= 0.99990404 ='\u0000' or \u0000\n",
+      "u : 77 : 0.0 ,max= 0.32005534 ='a' or a\n",
+      "k : 81 : 0.0 ,max= 0.99995875 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.2969624 ='a' or a\n",
+      "  : 81 : 0.0 ,max= 0.99999464 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.3876978 ='b' or b\n",
+      "  : 82 : 0.0 ,max= 0.99998295 ='\u0000' or \u0000\n",
+      "p : 97 : 0.0 ,max= 0.11978736 ='a' or a\n",
+      "\n",
+      " : 75 : 0.0 ,max= 0.9999429 ='\u0000' or \u0000\n",
+      "i : 84 : 0.0 ,max= 0.2892744 ='i' or i\n",
+      "r : 75 : 0.0 ,max= 0.9997961 ='\u0000' or \u0000\n",
+      "i : 85 : 0.0 ,max= 0.7049502 ='i' or i\n",
+      "s : 67 : 0.0 ,max= 0.9999634 ='\u0000' or \u0000\n",
+      "a : 79 : 0.0 ,max= 0.41457507 ='a' or a\n",
+      "m : 14 : 0.0 ,max= 0.9999944 ='\u0000' or \u0000\n",
+      ", : 2 : 0.0 ,max= 0.4635011 ='a' or a\n",
+      "  : 67 : 0.0 ,max= 0.9999883 ='\u0000' or \u0000\n",
+      "a : 80 : 0.0 ,max= 0.362379 ='b' or b\n",
+      "n : 75 : 0.0 ,max= 0.99980396 ='\u0000' or \u0000\n",
+      "i : 67 : 0.5571883 ,max= 0.5571883 ='a' or a\n",
+      "a : 86 : 0.0 ,max= 0.9999752 ='\u0000' or \u0000\n",
+      "t : 75 : 0.0 ,max= 0.6023729 =' ' or  \n",
+      "i : 68 : 0.0 ,max= 0.9999801 ='\u0000' or \u0000\n",
+      "b : 75 : 0.0 ,max= 0.47598708 ='s' or s\n",
+      "i : 2 : 0.0 ,max= 0.9999957 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.28245267 ='a' or a\n",
+      "o : 2 : 0.0 ,max= 0.999985 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.3555303 ='s' or s\n",
+      "b : 71 : 0.0 ,max= 0.9999927 ='\u0000' or \u0000\n",
+      "e : 84 : 0.0 ,max= 0.53523034 ='i' or i\n",
+      "r : 71 : 0.0 ,max= 0.9999981 ='\u0000' or \u0000\n",
+      "e : 80 : 0.0 ,max= 0.5034802 ='a' or a\n",
+      "n : 75 : 0.0 ,max= 0.9999882 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.2885264 ='a' or a\n",
+      "  : 75 : 0.0 ,max= 0.9999958 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.3098474 ='n' or n\n",
+      "  : 82 : 0.0 ,max= 0.99999285 ='\u0000' or \u0000\n",
+      "p : 81 : 0.0 ,max= 0.20909056 ='a' or a\n",
+      "o : 84 : 0.0 ,max= 0.9984212 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.2661589 ='l' or l\n",
+      "i : 68 : 0.0 ,max= 0.99997735 ='\u0000' or \u0000\n",
+      "b : 75 : 0.55284035 ,max= 0.55284035 ='i' or i\n",
+      "i : 67 : 0.0 ,max= 0.9999957 ='\u0000' or \u0000\n",
+      "a : 2 : 0.78603745 ,max= 0.78603745 =' ' or  \n",
+      "  : 68 : 0.0 ,max= 0.9999894 ='\u0000' or \u0000\n",
+      "b : 67 : 0.0 ,max= 0.21065392 ='o' or o\n",
+      "a : 84 : 0.0 ,max= 0.99997735 ='\u0000' or \u0000\n",
+      "r : 67 : 0.0 ,max= 0.47359765 ='n' or n\n",
+      "a : 16 : 0.0 ,max= 0.9999504 ='\u0000' or \u0000\n",
+      ". : 2 : 0.30400613 ,max= 0.30400613 =' ' or  \n",
+      "  : 67 : 0.0 ,max= 0.9998479 ='\u0000' or \u0000\n",
+      "a : 80 : 0.0 ,max= 0.15637194 ='a' or a\n",
+      "n : 75 : 0.0 ,max= 0.99996054 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.5507419 ='a' or a\n",
+      "  : 81 : 0.0 ,max= 0.99993026 ='\u0000' or \u0000\n",
+      "o : 77 : 0.0 ,max= 0.1988118 ='o' or o\n",
+      "k : 87 : 0.0 ,max= 0.9999602 ='\u0000' or \u0000\n",
+      "u : 79 : 0.0 ,max= 0.7294033 ='a' or a\n",
+      "m : 97 : 0.0 ,max= 0.99995553 ='\u0000' or \u0000\n",
+      "\n",
+      " : 67 : 0.8291297 ,max= 0.8291297 ='a' or a\n",
+      "a : 2 : 0.0 ,max= 0.9999807 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.34169686 =' ' or  \n",
+      "i : 80 : 0.0 ,max= 0.99999523 ='\u0000' or \u0000\n",
+      "n : 75 : 0.0 ,max= 0.16553815 ='n' or n\n",
+      "i : 2 : 0.0 ,max= 0.9999697 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.22256577 ='t' or t\n",
+      "o : 2 : 0.0 ,max= 0.99987006 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.7173607 =' ' or  \n",
+      "b : 67 : 0.0 ,max= 0.9997695 ='\u0000' or \u0000\n",
+      "a : 84 : 0.0 ,max= 0.332969 =' ' or  \n",
+      "r : 67 : 0.0 ,max= 0.9999249 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.4304367 ='i' or i\n",
+      "  : 85 : 0.0 ,max= 0.9998766 ='\u0000' or \u0000\n",
+      "s : 75 : 0.0 ,max= 0.17212385 ='y' or y\n",
+      "i : 77 : 0.0 ,max= 0.99999356 ='\u0000' or \u0000\n",
+      "k : 75 : 0.0 ,max= 0.26487193 ='s' or s\n",
+      "i : 79 : 0.0 ,max= 0.99999666 ='\u0000' or \u0000\n",
+      "m : 67 : 0.0 ,max= 0.85401285 =' ' or  \n",
+      "a : 2 : 0.0 ,max= 0.9999367 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.50911504 =' ' or  \n",
+      "o : 77 : 0.0 ,max= 0.9999945 ='\u0000' or \u0000\n",
+      "k : 87 : 0.0 ,max= 0.22171389 ='w' or w\n",
+      "u : 79 : 0.0 ,max= 0.9999958 ='\u0000' or \u0000\n",
+      "m : 67 : 0.0 ,max= 0.8630907 =' ' or  \n",
+      "a : 2 : 0.0 ,max= 0.99999607 ='\u0000' or \u0000\n",
+      "  : 67 : 0.0 ,max= 0.39087346 =' ' or  \n",
+      "a : 80 : 0.0 ,max= 0.9999615 ='\u0000' or \u0000\n",
+      "n : 75 : 0.0 ,max= 0.1637262 ='p' or p\n",
+      "i : 67 : 0.0 ,max= 0.99998784 ='\u0000' or \u0000\n",
+      "a : 86 : 0.0 ,max= 0.23146775 ='n' or n\n",
+      "t : 75 : 0.0 ,max= 0.9999143 ='\u0000' or \u0000\n",
+      "i : 68 : 0.0 ,max= 0.81197506 ='i' or i\n",
+      "b : 75 : 0.0 ,max= 0.99999905 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.85241014 ='o' or o\n",
+      "  : 67 : 0.0 ,max= 1.0 ='\u0000' or \u0000\n",
+      "a : 84 : 0.0 ,max= 0.31387514 ='a' or a\n",
+      "r : 75 : 0.0 ,max= 0.99999917 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.42243236 ='i' or i\n",
+      "  : 75 : 0.0 ,max= 0.999998 ='\u0000' or \u0000\n",
+      "i : 80 : 0.0 ,max= 0.18704346 ='a' or a\n",
+      "n : 71 : 0.0 ,max= 0.999969 ='\u0000' or \u0000\n",
+      "e : 70 : 0.0 ,max= 0.25577137 ='a' or a\n",
+      "d : 67 : 0.0 ,max= 0.99998665 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.47997317 ='e' or e\n",
+      "  : 75 : 0.0 ,max= 0.99994886 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.20364113 ='b' or b\n",
+      "  : 85 : 0.0 ,max= 0.9998989 ='\u0000' or \u0000\n",
+      "s : 75 : 0.0 ,max= 0.12950729 =' ' or  \n",
+      "i : 2 : 0.0 ,max= 0.99998736 ='\u0000' or \u0000\n",
+      "  : 97 : 0.0 ,max= 0.37459338 ='n' or n\n",
+      "\n",
+      " : 79 : 0.0 ,max= 0.9998785 ='\u0000' or \u0000\n",
+      "m : 75 : 0.39809135 ,max= 0.39809135 ='i' or i\n",
+      "i : 71 : 0.0 ,max= 0.9999945 ='\u0000' or \u0000\n",
+      "e : 79 : 0.0 ,max= 0.63846344 =' ' or  \n",
+      "m : 75 : 0.0 ,max= 0.9999933 ='\u0000' or \u0000\n",
+      "i : 71 : 0.0 ,max= 0.27742898 ='a' or a\n",
+      "e : 2 : 0.0 ,max= 0.99997616 ='\u0000' or \u0000\n",
+      "  : 91 : 0.0 ,max= 0.5516037 =' ' or  \n",
+      "y : 71 : 0.0 ,max= 0.9999864 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.35754415 ='a' or a\n",
+      "  : 79 : 0.0 ,max= 0.9999896 ='\u0000' or \u0000\n",
+      "m : 75 : 0.0 ,max= 0.2188886 ='n' or n\n",
+      "i : 71 : 0.0 ,max= 0.9999982 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.56814885 ='n' or n\n",
+      "  : 68 : 0.0 ,max= 0.9999975 ='\u0000' or \u0000\n",
+      "b : 87 : 0.0 ,max= 0.34907463 ='a' or a\n",
+      "u : 14 : 0.0 ,max= 0.9999938 ='\u0000' or \u0000\n",
+      ", : 2 : 0.5874072 ,max= 0.5874072 =' ' or  \n",
+      "  : 81 : 0.0 ,max= 0.9999906 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.14683472 ='m' or m\n",
+      "  : 68 : 0.0 ,max= 0.99996746 ='\u0000' or \u0000\n",
+      "b : 81 : 0.0 ,max= 0.16209838 ='i' or i\n",
+      "o : 2 : 0.0 ,max= 0.999913 ='\u0000' or \u0000\n",
+      "  : 79 : 0.0 ,max= 0.23473799 =' ' or  \n",
+      "m : 67 : 0.0 ,max= 0.99991405 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.40048116 ='a' or a\n",
+      "  : 80 : 0.0 ,max= 0.9591759 ='\u0000' or \u0000\n",
+      "n : 67 : 0.0 ,max= 0.9529281 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.32231542 ='i' or i\n",
+      "  : 81 : 0.0 ,max= 0.9992506 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.21130711 ='b' or b\n",
+      "  : 85 : 0.0 ,max= 0.9999291 ='\u0000' or \u0000\n",
+      "s : 71 : 0.0 ,max= 0.14653553 ='a' or a\n",
+      "e : 2 : 0.0 ,max= 0.9998222 ='\u0000' or \u0000\n",
+      "  : 79 : 0.0 ,max= 0.26007193 ='n' or n\n",
+      "m : 73 : 0.0 ,max= 0.9999988 ='\u0000' or \u0000\n",
+      "g : 68 : 0.75751835 ,max= 0.75751835 ='b' or b\n",
+      "b : 71 : 0.0 ,max= 0.9999999 ='\u0000' or \u0000\n",
+      "e : 85 : 0.0 ,max= 0.9110512 ='e' or e\n",
+      "s : 71 : 0.0 ,max= 0.999997 ='\u0000' or \u0000\n",
+      "e : 69 : 0.0 ,max= 0.77377737 =' ' or  \n",
+      "c : 74 : 0.0 ,max= 0.99999547 ='\u0000' or \u0000\n",
+      "h : 75 : 0.0 ,max= 0.38368067 ='b' or b\n",
+      "i : 80 : 0.0 ,max= 0.9999865 ='\u0000' or \u0000\n",
+      "n : 2 : 0.0 ,max= 0.23874 ='i' or i\n",
+      "  : 79 : 0.0 ,max= 0.9999865 ='\u0000' or \u0000\n",
+      "m : 75 : 0.0 ,max= 0.21032903 ='o' or o\n",
+      "i : 2 : 0.0 ,max= 0.97888136 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.77795285 ='\u0000' or \u0000\n",
+      "o : 73 : 0.0 ,max= 0.4111451 ='b' or b\n",
+      "g : 97 : 0.0 ,max= 0.9975435 ='\u0000' or \u0000\n",
+      "\n",
+      " : 81 : 0.0 ,max= 0.40969607 ='b' or b\n",
+      "o : 80 : 0.0 ,max= 0.99996674 ='\u0000' or \u0000\n",
+      "n : 81 : 0.0 ,max= 0.816993 ='s' or s\n",
+      "o : 2 : 0.0 ,max= 0.9996692 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.4143288 =' ' or  \n",
+      "b : 67 : 0.0 ,max= 0.99866366 ='\u0000' or \u0000\n",
+      "a : 77 : 0.0 ,max= 0.86959743 ='e' or e\n",
+      "k : 87 : 0.0 ,max= 0.9999347 ='\u0000' or \u0000\n",
+      "u : 68 : 0.0 ,max= 0.30339614 ='o' or o\n",
+      "b : 67 : 0.0 ,max= 0.9999318 ='\u0000' or \u0000\n",
+      "a : 68 : 0.0 ,max= 0.55627626 ='e' or e\n",
+      "b : 75 : 0.0 ,max= 0.9999988 ='\u0000' or \u0000\n",
+      "i : 67 : 0.0 ,max= 0.6882785 ='i' or i\n",
+      "a : 16 : 0.0 ,max= 0.99999905 ='\u0000' or \u0000\n",
+      ". : 2 : 0.63807607 ,max= 0.63807607 =' ' or  \n",
+      "  : 81 : 0.0 ,max= 0.9999938 ='\u0000' or \u0000\n",
+      "o : 77 : 0.0 ,max= 0.16745386 ='a' or a\n",
+      "k : 87 : 0.0 ,max= 0.9999826 ='\u0000' or \u0000\n",
+      "u : 79 : 0.0 ,max= 0.35894087 ='o' or o\n",
+      "m : 67 : 0.0 ,max= 0.99999046 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.54451257 ='o' or o\n",
+      "  : 81 : 0.0 ,max= 0.999992 ='\u0000' or \u0000\n",
+      "o : 79 : 0.0 ,max= 0.31599426 ='o' or o\n",
+      "m : 75 : 0.0 ,max= 0.9999981 ='\u0000' or \u0000\n",
+      "i : 80 : 0.0 ,max= 0.7479673 ='i' or i\n",
+      "n : 71 : 0.0 ,max= 0.9999975 ='\u0000' or \u0000\n",
+      "e : 67 : 0.0 ,max= 0.30397472 =' ' or  \n",
+      "a : 2 : 0.0 ,max= 0.9999895 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.33242607 ='n' or n\n",
+      "b : 75 : 0.0 ,max= 0.99999964 ='\u0000' or \u0000\n",
+      "i : 71 : 0.0 ,max= 0.55211216 ='o' or o\n",
+      "e : 2 : 0.0 ,max= 0.9999896 ='\u0000' or \u0000\n",
+      "  : 85 : 0.0 ,max= 0.57311517 =',' or ,\n",
+      "s : 75 : 0.0 ,max= 0.99986446 ='\u0000' or \u0000\n",
+      "i : 79 : 0.0 ,max= 0.38179022 =' ' or  \n",
+      "m : 71 : 0.0 ,max= 0.99993837 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.535282 ='a' or a\n",
+      "  : 86 : 0.0 ,max= 0.9999727 ='\u0000' or \u0000\n",
+      "t : 67 : 0.0 ,max= 0.22359857 ='b' or b\n",
+      "a : 79 : 0.0 ,max= 0.99992824 ='\u0000' or \u0000\n",
+      "m : 87 : 0.0 ,max= 0.31156433 ='g' or g\n",
+      "u : 80 : 0.0 ,max= 0.99999475 ='\u0000' or \u0000\n",
+      "n : 81 : 0.0 ,max= 0.36683008 =' ' or  \n",
+      "o : 2 : 0.0 ,max= 0.9999802 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.8161028 =' ' or  \n",
+      "b : 71 : 0.0 ,max= 0.9999987 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.7628135 ='e' or e\n",
+      "  : 68 : 0.0 ,max= 0.99999976 ='\u0000' or \u0000\n",
+      "b : 71 : 0.0 ,max= 0.33450356 =' ' or  \n",
+      "e : 84 : 0.0 ,max= 0.9999902 ='\u0000' or \u0000\n",
+      "r : 97 : 0.0 ,max= 0.5999791 =' ' or  \n",
+      "\n",
+      " : 71 : 0.0 ,max= 0.999995 ='\u0000' or \u0000\n",
+      "e : 80 : 0.0 ,max= 0.46296227 ='e' or e\n",
+      "n : 75 : 0.0 ,max= 0.99999857 ='\u0000' or \u0000\n",
+      "i : 68 : 0.0 ,max= 0.29175034 =' ' or  \n",
+      "b : 75 : 0.0 ,max= 0.99999857 ='\u0000' or \u0000\n",
+      "i : 67 : 0.0 ,max= 0.7135549 ='o' or o\n",
+      "a : 2 : 0.0 ,max= 0.9999989 ='\u0000' or \u0000\n",
+      "  : 68 : 0.0 ,max= 0.489905 =' ' or  \n",
+      "b : 81 : 0.0 ,max= 0.9999956 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.4581596 ='i' or i\n",
+      "  : 73 : 0.0 ,max= 0.99999964 ='\u0000' or \u0000\n",
+      "g : 81 : 0.0 ,max= 0.41946432 ='b' or b\n",
+      "o : 91 : 0.0 ,max= 0.9999968 ='\u0000' or \u0000\n",
+      "y : 71 : 0.0 ,max= 0.38771757 =' ' or  \n",
+      "e : 73 : 0.0 ,max= 0.99999225 ='\u0000' or \u0000\n",
+      "g : 81 : 0.0 ,max= 0.30586866 =' ' or  \n",
+      "o : 91 : 0.0 ,max= 0.9999702 ='\u0000' or \u0000\n",
+      "y : 71 : 0.0 ,max= 0.23933706 ='r' or r\n",
+      "e : 2 : 0.0 ,max= 0.9999925 ='\u0000' or \u0000\n",
+      "  : 75 : 0.0 ,max= 0.41456372 ='r' or r\n",
+      "i : 2 : 0.0 ,max= 0.9999939 ='\u0000' or \u0000\n",
+      "  : 70 : 0.0 ,max= 0.7434289 ='n' or n\n",
+      "d : 67 : 0.0 ,max= 0.999946 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.50064176 ='a' or a\n",
+      "  : 68 : 0.0 ,max= 0.99999464 ='\u0000' or \u0000\n",
+      "b : 71 : 0.0 ,max= 0.5146906 ='b' or b\n",
+      "e : 2 : 0.0 ,max= 0.9999981 ='\u0000' or \u0000\n",
+      "  : 85 : 0.0 ,max= 0.24470389 ='r' or r\n",
+      "s : 71 : 0.0 ,max= 0.99999464 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.5416919 ='i' or i\n",
+      "  : 81 : 0.0 ,max= 0.9999938 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.2678919 ='a' or a\n",
+      "  : 82 : 0.0 ,max= 0.99994814 ='\u0000' or \u0000\n",
+      "p : 75 : 0.0 ,max= 0.24538454 ='m' or m\n",
+      "i : 84 : 0.0 ,max= 0.9999553 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.22603017 ='r' or r\n",
+      "i : 68 : 0.0 ,max= 0.9999045 ='\u0000' or \u0000\n",
+      "b : 75 : 0.0 ,max= 0.42415068 =' ' or  \n",
+      "i : 67 : 0.0 ,max= 0.9999957 ='\u0000' or \u0000\n",
+      "a : 2 : 0.697635 ,max= 0.697635 =' ' or  \n",
+      "  : 68 : 0.0 ,max= 0.9998841 ='\u0000' or \u0000\n",
+      "b : 81 : 0.1525898 ,max= 0.1525898 ='o' or o\n",
+      "o : 84 : 0.0 ,max= 0.9998981 ='\u0000' or \u0000\n",
+      "r : 81 : 0.0 ,max= 0.25581405 ='b' or b\n",
+      "o : 85 : 0.0 ,max= 0.9998541 ='\u0000' or \u0000\n",
+      "s : 67 : 0.0 ,max= 0.2778033 ='w' or w\n",
+      "a : 79 : 0.0 ,max= 0.9998987 ='\u0000' or \u0000\n",
+      "m : 14 : 0.0 ,max= 0.19221726 ='l' or l\n",
+      ", : 2 : 0.0 ,max= 0.9998646 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.94848543 =' ' or  \n",
+      "o : 97 : 0.0 ,max= 0.9999969 ='\u0000' or \u0000\n",
+      "\n",
+      " : 77 : 0.0 ,max= 0.22803211 ='m' or m\n",
+      "k : 87 : 0.0 ,max= 0.9999472 ='\u0000' or \u0000\n",
+      "u : 79 : 0.0 ,max= 0.88192105 ='u' or u\n",
+      "m : 67 : 0.0 ,max= 0.99999845 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.60995805 ='a' or a\n",
+      "  : 81 : 0.0 ,max= 0.9999957 ='\u0000' or \u0000\n",
+      "o : 79 : 0.0 ,max= 0.20111638 =' ' or  \n",
+      "m : 75 : 0.0 ,max= 0.99999523 ='\u0000' or \u0000\n",
+      "i : 80 : 0.0 ,max= 0.7110646 ='i' or i\n",
+      "n : 71 : 0.0 ,max= 0.99999607 ='\u0000' or \u0000\n",
+      "e : 2 : 0.21944885 ,max= 0.21944885 =' ' or  \n",
+      "  : 75 : 0.0 ,max= 0.99998736 ='\u0000' or \u0000\n",
+      "i : 80 : 0.18722877 ,max= 0.18722877 ='n' or n\n",
+      "n : 71 : 0.0 ,max= 0.9999858 ='\u0000' or \u0000\n",
+      "e : 79 : 0.0 ,max= 0.37498945 ='a' or a\n",
+      "m : 67 : 0.0 ,max= 0.9999956 ='\u0000' or \u0000\n",
+      "a : 2 : 0.0 ,max= 0.41171473 ='a' or a\n",
+      "  : 79 : 0.0 ,max= 0.9999174 ='\u0000' or \u0000\n",
+      "m : 75 : 0.0 ,max= 0.27772033 ='n' or n\n",
+      "i : 71 : 0.0 ,max= 0.99994123 ='\u0000' or \u0000\n",
+      "e : 85 : 0.0 ,max= 0.5583555 ='n' or n\n",
+      "s : 71 : 0.0 ,max= 0.9999871 ='\u0000' or \u0000\n",
+      "e : 2 : 0.0 ,max= 0.2660652 ='a' or a\n",
+      "  : 81 : 0.0 ,max= 0.9999542 ='\u0000' or \u0000\n",
+      "o : 2 : 0.0 ,max= 0.4165807 ='a' or a\n",
+      "  : 86 : 0.0 ,max= 0.99999785 ='\u0000' or \u0000\n",
+      "t : 81 : 0.0 ,max= 0.20357658 ='b' or b\n",
+      "o : 79 : 0.0 ,max= 0.99996364 ='\u0000' or \u0000\n",
+      "m : 81 : 0.0 ,max= 0.40357432 ='k' or k\n",
+      "o : 80 : 0.0 ,max= 0.99998486 ='\u0000' or \u0000\n",
+      "n : 75 : 0.0 ,max= 0.23345305 ='b' or b\n",
+      "i : 77 : 0.0 ,max= 0.99999774 ='\u0000' or \u0000\n",
+      "k : 75 : 0.0 ,max= 0.22377312 =' ' or  \n",
+      "i : 84 : 0.0 ,max= 0.9999993 ='\u0000' or \u0000\n",
+      "r : 75 : 0.0 ,max= 0.30278137 ='r' or r\n",
+      "i : 2 : 0.0 ,max= 0.99998975 ='\u0000' or \u0000\n",
+      "  : 79 : 0.0 ,max= 0.30734506 =' ' or  \n",
+      "m : 75 : 0.0 ,max= 0.99999833 ='\u0000' or \u0000\n",
+      "i : 2 : 0.0 ,max= 0.22107941 ='g' or g\n",
+      "  : 68 : 0.0 ,max= 0.99974316 ='\u0000' or \u0000\n",
+      "b : 71 : 0.0 ,max= 0.37597418 ='b' or b\n",
+      "e : 2 : 0.0 ,max= 0.9999294 ='\u0000' or \u0000\n",
+      "  : 81 : 0.0 ,max= 0.2579345 ='l' or l\n",
+      "o : 77 : 0.0 ,max= 0.9993212 ='\u0000' or \u0000\n",
+      "k : 89 : 0.0 ,max= 0.34581697 ='r' or r\n",
+      "w : 71 : 0.0 ,max= 0.99999404 ='\u0000' or \u0000\n",
+      "e : 75 : 0.0 ,max= 0.31389257 ='u' or u\n",
+      "i : 80 : 0.0 ,max= 0.9999982 ='\u0000' or \u0000\n"
+     ]
+    },
+    {
+     "data": {
+      "text/plain": [
+       "-0.006836573282877604"
+      ]
+     },
+     "execution_count": 36,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "t='''duko ini piri se i duko o piriabe, o bo minea b\n",
+    "u dapu ori oria okweinma piki nemikase bereni nyan\n",
+    "a apu ma piri okuma, o nwose i beme, i duko o piri\n",
+    "abe iya ani ineda o bara bia okweinma nwo duko o p\n",
+    "irisam, aniatibi o bereni i poribia bara. ani okum\n",
+    "a ini o bara sikima okuma aniatibi ari ineda i si \n",
+    "miemie ye mie bu, o bo ma na o se mgbesechin mi og\n",
+    "ono bakubabia. okuma ominea bie sime tamuno be ber\n",
+    "enibia bo goyegoye i da be se o piribia borosam, o\n",
+    "kuma omine inema miese o tomonikiri mi be okwein'''\n",
+    "pcx(t)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {
+    "jupyter": {
+     "source_hidden": true
+    }
+   },
+   "source": [
+    "# these must match what was saved !\n",
+    "ALPHASIZE = my_txtutils.ALPHASIZE\n",
+    "NLAYERS = 3\n",
+    "INTERNALSIZE = 512\n",
+    "\n",
+    "ok02 =\"checkpoints/rnn_train_1560839489-30000000\" # okrika 2019-06-18\n",
+    "ok03 =\"checkpoints/rnn_train_1563601394-60000000\" # okrika 2019-07-20\n",
+    "\n",
+    "author=ok03\n",
+    "\n",
+    "ncnt = 0\n",
+    "with tf.Session() as sess:\n",
+    "    # new_saver = tf.train.import_meta_graph('checkpoints/rnn_train_1512567262-0.meta')\n",
+    "    new_saver = tf.train.import_meta_graph(author+'.meta')\n",
+    "    new_saver.restore(sess, author)\n",
+    "    x = my_txtutils.convert_from_alphabet(ord(\"L\"))\n",
+    "    x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "\n",
+    "    # initial values\n",
+    "    y = x\n",
+    "    h = np.zeros([1, INTERNALSIZE * NLAYERS], dtype=np.float32)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]\n",
+    "    yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})\n",
+    "    y=np.reshape(yo,[98,-1])\n",
+    "    y=y.flatten()\n",
+    "    v=\"hello world\"\n",
+    "    for i in range(ALPHASIZE):\n",
+    "        #print(tf.shape(yo))\n",
+    "        #print(len(yo))\n",
+    "        #c = my_txtutils.sample_from_probabilities(yo, topn=2)\n",
+    "        #y = np.array([[c]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1\n",
+    "        c = chr(my_txtutils.convert_to_alphabet(i))\n",
+    "        print(c,':',y[i])\n",
+    "        if c == '\\n':\n",
+    "            ncnt = 0\n",
+    "        else:\n",
+    "            ncnt += 1\n",
+    "        if ncnt == 100:\n",
+    "            print(\"\")\n",
+    "            ncnt = 0"
+   ]
+  },
+  {
+   "cell_type": "raw",
+   "metadata": {
+    "jupyter": {
+     "source_hidden": true
+    }
+   },
+   "source": [
+    "# Softmax layer implementation:\n",
+    "# Flatten the first two dimension of the output [ BATCHSIZE, SEQLEN, ALPHASIZE ] => [ BATCHSIZE x SEQLEN, ALPHASIZE ]\n",
+    "# then apply softmax readout layer. This way, the weights and biases are shared across unrolled time steps.\n",
+    "# From the readout point of view, a value coming from a sequence time step or a minibatch item is the same thing.\n",
+    "'''\n",
+    "Yflat = tf.reshape(Yr, [-1, INTERNALSIZE])    # [ BATCHSIZE x SEQLEN, INTERNALSIZE ]\n",
+    "Ylogits = layers.linear(Yflat, ALPHASIZE)     # [ BATCHSIZE x SEQLEN, ALPHASIZE ]\n",
+    "Yflat_ = tf.reshape(Yo_, [-1, ALPHASIZE])     # [ BATCHSIZE x SEQLEN, ALPHASIZE ]\n",
+    "loss = tf.nn.softmax_cross_entropy_with_logits(logits=Ylogits, labels=Yflat_)  # [ BATCHSIZE x SEQLEN ]\n",
+    "loss = tf.reshape(loss, [batchsize, -1])      # [ BATCHSIZE, SEQLEN ]\n",
+    "Yo = tf.nn.softmax(Ylogits, name='Yo')        # [ BATCHSIZE x SEQLEN, ALPHASIZE ]\n",
+    "Y = tf.argmax(Yo, 1)                          # [ BATCHSIZE x SEQLEN ]\n",
+    "Y = tf.reshape(Y, [batchsize, -1], name=\"Y\")  # [ BATCHSIZE, SEQLEN ]\n",
+    "train_step = tf.train.AdamOptimizer(lr).minimize(loss)\n",
+    "'''\n",
+    "        # If sampling is be done from the topn most likely characters, the generated text\n",
+    "        # is more credible and more \"english\". If topn is not set, it defaults to the full\n",
+    "        # distribution (ALPHASIZE)\n",
+    "\n",
+    "        # Recommended: topn = 10 for intermediate checkpoints, topn=2 or 3 for fully trained checkpoints\n",
+    "        print('yes' if re.search(\"g\", \"abcdef\") else 'no')\n",
+    "        \n",
+    "lstm.score('ani okum a ini o bara sikima okuma aniatibi ari ineda i simiemie ye mie bu, o bo ma na o se mgbesechin mi ogono bakubabia')=-69.1488\n",
+    "model.score('ani okum a ini o bara sikima okuma aniatibi ari ineda i simiemie ye mie bu, o bo ma na o se mgbesechin mi ogono bakubabia')=-80.0409\n",
+    "model.score('duko ini piri se i duko o piriabe')=-26.2484\n",
+    "lstm.score('duko ini piri se i duko o piriabe')=-24.2721\n",
+    "lstm.score(rom)=-98396.4766\n",
+    "model.score(rom)=-119858.0547\n",
+    "rom_new stat=39624 words, 399073 xtrs\n",
+    "bible.10.txt = 385 lines 24720 words 236951xtrs\n",
+    "a bime ari ominea ogboku soni, tomoni mie se ini si bu vinpiki, isi jinseapu ma bie a miesa bara mi\n",
+    "model=-65.91641998291016\n",
+    "lstm=-56.092166900634766\n",
+    "tamuno be bi na mie nwo be ye mi i nemime, oloko mi bu i boro karakaraye mi now selebia oku dawobosam. i nemi kpainmame na iri torumgbolupun apu ma be ateli diebo-e, enekubo so kanakana bie sime apu ma piri bo-e, se yenemikapu ma dagbukukumari bo-e, ase na ire na yediebo-e. i piki bereniokime na oloko mi bie mi dawonemi na kokomaye mi na be bein mi i nwo nyanasam. i ye se jin-apu dieme, nde miese i ye se ibu dieka bara i tamuno bere dukome na, furu ma, okuma iri i furu-apu i nwo beme, sefi ma okuma iri i sefi-au i oru teke dikisimame, okuma i oruwari ma bie ye furu-au i bomame na i tamuno oloko nwo nemi warabe, okuma i bugerere se tamuno be toru chua-au, oria oloko mi nwo kan bu fiafiadiri mi nwo beme, omine juapu ma gose, jinseapu ma tamuno be dukosimame.    i nemikase oloko mi duko ye mieme bebe, iya bupele mi yela ye-e, okuma i nemikase oloko mi dukoye mieke bebe, mgboku ibu soni i peleka ibiteinme. jinsebo be se bupeleka bo be nemikase oloko mi dukoye mieme nwo be okuma\n",
+    "model=-583.2510375976562\n",
+    "lstm=-488.6672058105469\n",
+    "full stats 668522words 6539176xters\n",
+    "bible stats 35049  915531 4264406"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "lstm ppx= 1.000612748222892\n",
+      "model ppx= 1.0006626563667096\n"
+     ]
+    }
+   ],
+   "source": [
+    "import math\n",
+    "def pc4p(prob,words):\n",
+    "    #return np.log2(np.sum(arr))*(-1/len(txt))\n",
+    "    return math.exp(prob)**(-1/words)\n",
+    "def pc4lp(prob,words):\n",
+    "    #return np.log2(np.sum(arr))*(-1/len(txt))\n",
+    "    return prob**(-1/words)\n",
+    "print('lstm ppx=',pc4lp(math.exp(-24.2721),39624))\n",
+    "print('model ppx=',pc4lp(math.exp(-26.2484),39624))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {
+<<<<<<< HEAD
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+=======
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true,
+     "source_hidden": true
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+    }
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "988\n",
+      "lstm ppx= 1.639846164055032\n",
+      "model ppx= 1.8045929579573747\n",
+      "99\n",
+      "lstm ppx= 1.762243202625417\n",
+      "model ppx= 1.9460903749339529\n"
+     ]
+    }
+   ],
+   "source": [
+    "l=len('tamuno be bi na mie nwo be ye mi i nemime, oloko mi bu i boro karakaraye mi now selebia oku dawobosam. i nemi kpainmame na iri torumgbolupun apu ma be ateli diebo-e, enekubo so kanakana bie sime apu ma piri bo-e, se yenemikapu ma dagbukukumari bo-e, ase na ire na yediebo-e. i piki bereniokime na oloko mi bie mi dawonemi na kokomaye mi na be bein mi i nwo nyanasam. i ye se jin-apu dieme, nde miese i ye se ibu dieka bara i tamuno bere dukome na, furu ma, okuma iri i furu-apu i nwo beme, sefi ma okuma iri i sefi-au i oru teke dikisimame, okuma i oruwari ma bie ye furu-au i bomame na i tamuno oloko nwo nemi warabe, okuma i bugerere se tamuno be toru chua-au, oria oloko mi nwo kan bu fiafiadiri mi nwo beme, omine juapu ma gose, jinseapu ma tamuno be dukosimame.    i nemikase oloko mi duko ye mieme bebe, iya bupele mi yela ye-e, okuma i nemikase oloko mi dukoye mieke bebe, mgboku ibu soni i peleka ibiteinme. jinsebo be se bupeleka bo be nemikase oloko mi dukoye mieme nwo be okuma')\n",
+    "print(l)\n",
+    "print('lstm ppx=',pc4p(-488.6672058105469,l))\n",
+    "print('model ppx=',pc4p(-583.2510375976562,l))\n",
+    "l=len('a bime ari ominea ogboku soni, tomoni mie se ini si bu vinpiki, isi jinseapu ma bie a miesa bara mi')\n",
+    "print(l)\n",
+    "print('lstm ppx=',pc4p(-56.092166900634766,l))\n",
+    "print('model ppx=',pc4p(-65.91641998291016,l))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {
+    "collapsed": false,
+    "jupyter": {
+     "outputs_hidden": false
+    }
+   },
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "5.109089028063325e-12"
+      ]
+     },
+     "execution_count": 14,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "import json\n",
+    "#with open('vloss_main.json','r') as f:\n",
+    "with open('vloss.json','r') as f:\n",
+    "    vloss=json.load(f)\n",
+    "#print(vloss) \n",
+    "plt.figure()\n",
+    "plt.plot(vloss)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "Collecting https://github.com/kpu/kenlm/archive/master.zip\n",
+      "  Using cached https://github.com/kpu/kenlm/archive/master.zip\n",
+      "Building wheels for collected packages: kenlm\n",
+      "  Building wheel for kenlm (setup.py): started\n",
+      "  Building wheel for kenlm (setup.py): finished with status 'error'\n",
+      "  Running setup.py clean for kenlm\n",
+      "Failed to build kenlm\n",
+      "Installing collected packages: kenlm\n",
+      "    Running setup.py install for kenlm: started\n",
+      "    Running setup.py install for kenlm: finished with status 'error'\n"
+     ]
+    },
+    {
+     "name": "stderr",
+     "output_type": "stream",
+     "text": [
+      "  ERROR: Failed building wheel for kenlm\n",
+      "ERROR: Command errored out with exit status 1: 'H:\\app\\msys32\\home\\u1273400\\python_research\\python.exe' -u -c 'import sys, setuptools, tokenize; sys.argv[0] = '\"'\"'C:\\\\Users\\\\U1273400\\\\AppData\\\\Local\\\\Temp\\\\pip-req-build-unby0agv\\\\setup.py'\"'\"'; __file__='\"'\"'C:\\\\Users\\\\U1273400\\\\AppData\\\\Local\\\\Temp\\\\pip-req-build-unby0agv\\\\setup.py'\"'\"';f=getattr(tokenize, '\"'\"'open'\"'\"', open)(__file__);code=f.read().replace('\"'\"'\\r\\n'\"'\"', '\"'\"'\\n'\"'\"');f.close();exec(compile(code, __file__, '\"'\"'exec'\"'\"'))' install --record 'C:\\Users\\U1273400\\AppData\\Local\\Temp\\pip-record-s61oueom\\install-record.txt' --single-version-externally-managed --compile --install-headers 'H:\\app\\msys32\\home\\u1273400\\python_research\\Include\\kenlm' Check the logs for full command output.\n"
+     ]
+    }
+   ],
+   "source": [
+    "!pip install https://github.com/kpu/kenlm/archive/master.zip --log kenlm.log"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 1,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import json\n",
+    "with open('vloss_slgru201219.json','r') as f:\n",
+    "    vloss=json.load(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x20d14cdb8b0>]"
+      ]
+     },
+     "execution_count": 2,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import matplotlib.pyplot as plt\n",
+    "import matplotlib.ticker as ticker\n",
+    "# product = reduce((lambda x, y: x * y), [1, 2, 3, 4])\n",
+    "\n",
+    "plt.figure()\n",
+    "plt.plot(vloss)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+<<<<<<< HEAD
+   "metadata": {
+    "collapsed": true,
+    "jupyter": {
+     "outputs_hidden": true
+    }
+   },
+=======
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import csv\n",
+    "with open('vloss.csv', mode='w') as vlf:\n",
+    "    vlc = csv.writer(vlf, delimiter=',', quotechar='\"', quoting=csv.QUOTE_MINIMAL)\n",
+    "    for row in vloss:\n",
+    "        vlc.writerow(row)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+   "outputs": [],
+   "source": [
+    "PATH = './cifar_net.pth'\n",
+    "net = Net()\n",
+    "net.load_state_dict(torch.load(PATH))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "[<matplotlib.lines.Line2D at 0x20d14fd7730>]"
+      ]
+     },
+     "execution_count": 16,
+     "metadata": {},
+     "output_type": "execute_result"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "import json\n",
+    "with open('vloss_main.json','r') as f:\n",
+    "    vloss=json.load(f)\n",
+    "#print(vloss) \n",
+    "vloss=json.loads(vloss.replace(\"'\",'\"'))\n",
+    "plt.figure()\n",
+    "plt.plot(vloss['acc'])\n",
+    "plt.figure()\n",
+    "plt.plot(vloss['loss'])\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "import kenlm\n",
+    "model = kenlm.Model('rpynotes/ok-rnn/txteval/val/text.arpa')"
+   ]
+  }
+ ],
+ "metadata": {
+  "anaconda-cloud": {},
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+<<<<<<< HEAD
+   "version": "3.7.3"
+=======
+   "version": "3.7.9"
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}

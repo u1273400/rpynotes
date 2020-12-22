@@ -23,8 +23,6 @@ import numpy as np
 import my_txtutils as txt
 import json
 import torch
-import datetime
-
 # tf.set_random_seed(0)
 
 # model parameters
@@ -48,7 +46,7 @@ INTERNALSIZE = 512
 NLAYERS = 3
 learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
-nb_epoch = 120
+nb_epoch = 75
 VALI_SEQLEN = 30
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
@@ -73,14 +71,18 @@ class RNN(nn.Module):
 
         self.hidden_size = hidden_size
 
-        self.i2h = nn.GRUCell(input_size, hidden_size)
-        self.i2o = nn.Linear(input_size + hidden_size, output_size)
+        self.i2h = [nn.GRUCell(input_size, hidden_size) for i in range(NLAYERS)]
+        self.i2o = [nn.Linear(input_size + hidden_size, output_size) for i in range(NLAYERS)]
         self.softmax = nn.LogSoftmax(dim=1)
 
     def forward(self, input, hidden):
         combined = torch.cat((input, hidden), 1)
-        hidden = self.i2h(input,hidden)
-        output = self.i2o(combined)
+        hidden = self.i2h[0](input,hidden)
+        output = self.i2o[0](combined)
+        for i in range(1, NLAYERS):
+            combined = torch.cat((output, hidden), 1)
+            hidden = self.i2h[i](output,hidden)
+            output = self.i2o[i](combined)
         output = self.softmax(output)
         return output, hidden
 
@@ -91,24 +93,26 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 print('using gpu..' if torch.cuda.is_available() else 'using cpu..')
 rnn = RNN(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
 rnn.to(device)
-  
+
 criterion = nn.NLLLoss()
-# training fn
-learning_rate = 0.005 # If you set this too high, it might explode. If too low, it might not learn
+
+# train_fn
+learning_rate = 0.005  # If you set this too high, it might explode. If too low, it might not learn
+
 
 def train(category_tensor, line_tensor):
     hidden = rnn.initHidden()
 
     rnn.zero_grad()
-    
+
     lint = []
     for i in range(line_tensor.size()[0]):
         output, hidden = rnn(line_tensor[i], hidden)
         lint.append(output)
-    input = torch.stack(lint).transpose(0,1).transpose(1,2)
-#     print(f'is={input.size()}, cs={category_tensor.size()}')
-#     print(f'is[1:]={input.size()[1:]}, cs[1:]={category_tensor.size()[1:]}')
-#     print(f'is[2:]={input.size()[2:]}, cs[2:]={category_tensor.size()[2:]}')
+    input = torch.stack(lint).transpose(0, 1).transpose(1, 2)
+    #     print(f'is={input.size()}, cs={category_tensor.size()}')
+    #     print(f'is[1:]={input.size()[1:]}, cs[1:]={category_tensor.size()[1:]}')
+    #     print(f'is[2:]={input.size()[2:]}, cs[2:]={category_tensor.size()[2:]}')
     loss = criterion(input, category_tensor)
     loss.backward()
 
@@ -116,7 +120,13 @@ def train(category_tensor, line_tensor):
     for p in rnn.parameters():
         p.data.add_(p.grad.data, alpha=-learning_rate)
 
-    return torch.stack(lint).transpose(0,1), loss.item()
+    return torch.stack(lint).transpose(0, 1), loss.item()
+    # Add parameters' gradients to their values, multiplied by learning rate
+    for p in gru.parameters():
+        p.data.add_(p.grad.data, alpha=-learning_rate)
+
+    return output.transpose(0,1), loss.item()
+
 # init train
 
 def lin2txt(lt):
@@ -130,13 +140,15 @@ def mb2t(rows):
             tensor[i][j][letter_code] = 1
     return tensor
 
+#training
 print_every = 250
 plot_every = 100
+
+vloss = []
 
 # Keep track of losses for plotting
 current_loss = 0
 all_losses = []
-vloss = []
 iter=0
 def timeSince(since):
     now = time.time()
@@ -146,7 +158,7 @@ def timeSince(since):
     return '%dm %ds' % (m, s)
 
 start = time.time()
-old_epoch=0
+
 for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=nb_epoch):
     #category, line, category_tensor, line_tensor = randomTrainingExample()
     category =  [lin2txt(l) for l in y_]
@@ -167,18 +179,14 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
                 eta = (nb_epoch-epoch)/speed
                 sspeed = speed*60*60
                 seta = str(datetime.timedelta(seconds=int(eta)))
-                stats = f'average epoch rate per hr = %3.2f,  eta = {seta}'%(sspeed)
+                stats = f'average batch rate per hr = %3.2f,  eta = {seta}'%(sspeed)
             else:
-                stats ='initialising stats..'
-            correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
-            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
-        if epoch != old_epoch:
-            PATH = './slgru_epoch120.model'
-            torch.save(rnn.state_dict(), PATH)
-            old_epoch=epoch
+                stats ='calculating stats..'
+            correct = '✓' if guess[i] == category[i] else '✗ %s' % stats
+            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch, nb_epoch, tss, loss, lines[i], guess[0], correct))
 
     # Add current loss avg to list of losses
-    if iter % plot_every == 0:
+    if iter % plot_every == 0 and len(valitext) > 0:
         all_losses.append(current_loss / plot_every)
         current_loss = 0
         vali_x, vali_y, _ = next(txt.rnn_minibatch_sequencer(valitext, BATCHSIZE, VALI_SEQLEN, 1))  # all data in 1 batch
@@ -186,9 +194,6 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         output, loss = train(torch.tensor(vali_y, device=device, dtype=torch.long), line_tensor)
         vloss.append(loss)
         with open('vloss.json', 'w') as f:
-          json.dump(str({"vloss":vloss,"tloss":all_losses}),f)
+            loss_data={'vloss':vloss, 'tloss':all_losses}
+            json.dump(loss_data, f)
     iter += 1
-    
-with open('pytorch_train.json', 'w') as f:
-    json.dump(vloss, f)
-
