@@ -22,6 +22,7 @@ import math
 import numpy as np
 import my_txtutils as txt
 import json
+import datetime
 
 tf.set_random_seed(0)
 
@@ -46,6 +47,7 @@ INTERNALSIZE = 512
 NLAYERS = 3
 learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
+nb_epoch = 70
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
 shakedir = "txts/*.txt"
@@ -137,9 +139,12 @@ sess = tf.Session()
 sess.run(init)
 step = 0
 
+start = time.time()
+
 vloss=[]
+vacc=[]
 # training loop
-for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=70):
+for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=nb_epoch):
 
     # train on one minibatch
     feed_dict = {X: x, Y_: y_, Hin: istate, lr: learning_rate, pkeep: dropout_pkeep, batchsize: BATCHSIZE}
@@ -169,6 +174,21 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         # save validation data for Tensorboard
         validation_writer.add_summary(smm, step)
         vloss.append(ls)
+        vacc.append(acc)
+        elapsed_time = time.time() - start
+        tss = str(datetime.timedelta(seconds=elapsed_time))  # time since start string
+        if epoch > 0:
+            speed = epoch / elapsed_time
+            eta = (nb_epoch - epoch) / speed
+            sspeed = speed * 60 * 60
+            seta = str(datetime.timedelta(seconds=int(eta)))
+            mystats = f'average batch rate / hr = %3.2f,  eta = {seta}, elapsed = {tss} [{epoch}/{nb_epoch} epochs]' % (sspeed)
+        else:
+            mystats = 'estimating eta..'
+        print(mystats)
+        with open('vloss_main.json', "w") as f:
+            lstats = {"acc": vacc, "loss": vloss}
+            json.dump(str(lstats), f)
 
     # display a short text generated with the current weights and biases (every 150 batches)
     if step // 3 % _50_BATCHES == 0:
@@ -195,14 +215,12 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
     istate = ostate
     step += BATCHSIZE * SEQLEN
 
-import matplotlib.pyplot as plt
-import matplotlib.ticker as ticker
+# import matplotlib.pyplot as plt
+# import matplotlib.ticker as ticker
+#
+# plt.figure()
+# plt.plot(vloss)
 
-plt.figure()
-plt.plot(vloss)
-
-with open('vloss.json', "w") as f:
-    json.dump(vloss, f)
 
 # all runs: SEQLEN = 30, BATCHSIZE = 100, ALPHASIZE = 98, INTERNALSIZE = 512, NLAYERS = 3
 # run 1477669632 decaying learning rate 0.001-0.0001-1e7 dropout 0.5: not good
