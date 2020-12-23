@@ -48,7 +48,7 @@ INTERNALSIZE = 512
 NLAYERS = 3
 learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
-nb_epoch = 120
+nb_epoch = 75
 VALI_SEQLEN = 30
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
@@ -146,7 +146,7 @@ def timeSince(since):
     return '%dm %ds' % (m, s)
 
 start = time.time()
-old_epoch=0
+
 for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=nb_epoch):
     #category, line, category_tensor, line_tensor = randomTrainingExample()
     category =  [lin2txt(l) for l in y_]
@@ -172,10 +172,8 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
                 stats ='initialising stats..'
             correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
             print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
-        if epoch != old_epoch:
-            PATH = './slgru_epoch120.model'
-            torch.save(rnn.state_dict(), PATH)
-            old_epoch=epoch
+        PATH = './slgru_epoch120.model'
+        torch.save(rnn.state_dict(), PATH)
 
     # Add current loss avg to list of losses
     if iter % plot_every == 0:

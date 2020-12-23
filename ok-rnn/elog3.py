@@ -69,16 +69,16 @@ SCOPES = ['https://mail.google.com/']
 
 service = Create_Service(CLIENT_SECRET_FILE, API_NAME, API_VERSION, SCOPES)
 
-interval_hrs = 4
-dint_min = 50
-log_lines = 250
+interval_hrs = 1
+dint_min = 5
+log_lines = 50
 display_lines = 15
 
 root = './'
-log = f'{root}ok201220.log'
+log = f'{root}ok201222.log'
 myurl = "https://hooks.slack.com/services/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"
 
-kfiles = ['vloss_main.json']
+kfiles = ['vloss.json']
 
 sender, to, subject, message_text, file = (
     'ESPNet Research',
