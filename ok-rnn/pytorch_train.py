@@ -106,9 +106,6 @@ def train(category_tensor, line_tensor):
         output, hidden = rnn(line_tensor[i], hidden)
         lint.append(output)
     input = torch.stack(lint).transpose(0,1).transpose(1,2)
-#     print(f'is={input.size()}, cs={category_tensor.size()}')
-#     print(f'is[1:]={input.size()[1:]}, cs[1:]={category_tensor.size()[1:]}')
-#     print(f'is[2:]={input.size()[2:]}, cs[2:]={category_tensor.size()[2:]}')
     loss = criterion(input, category_tensor)
     loss.backward()
 
@@ -172,10 +169,10 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
                 stats ='initialising stats..'
             correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
             print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
-        if epoch != old_epoch:
+        if epoch != old_epoch and epoch % 5 == 0:
             PATH = './slgru_epoch120.model'
             torch.save(rnn.state_dict(), PATH)
-            old_epoch=epoch
+            old_epoch = epoch
 
     # Add current loss avg to list of losses
     if iter % plot_every == 0:
