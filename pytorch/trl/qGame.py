@@ -25,7 +25,7 @@ class TicTacGame():
         self.lVal = []
         self.lTest = []
         self.gameCount = 0
-        self.pindex = -1;
+        self.pindex = -1
 
     def gameLoop(self):
         self.reset()
