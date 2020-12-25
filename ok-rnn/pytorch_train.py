@@ -161,7 +161,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         guess = [lin2txt([ch.argmax(dim=0) for ch in line]) for line in output]
         for i in range(2):
             elapsed_time = time.time() - start
-            tss = str(datetime.timedelta(seconds=elapsed_time)) # time since start string
+            #tss = str(datetime.timedelta(seconds=elapsed_time)) # time since start string
             if epoch > 0:
                 speed = epoch/elapsed_time
                 eta = (nb_epoch-epoch)/speed
@@ -171,8 +171,9 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
             else:
                 stats ='initialising stats..'
             correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
-            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
-        if epoch != old_epoch:
+            acc = [1 if guess[i][j] == category[i][j] else 0 for j in range(SEQLEN)] 
+            print('epoch %d of %d (%.4f) %.4f %s / %s %s' % (epoch+1, nb_epoch, sum(acc)/SEQLEN*100, loss, lines[i], guess[0], correct))
+        if epoch != old_epoch and epoch % 5 == 0:
             PATH = './slgru_epoch120.model'
             torch.save(rnn.state_dict(), PATH)
             old_epoch=epoch
