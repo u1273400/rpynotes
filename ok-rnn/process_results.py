@@ -48,7 +48,6 @@ def get_scores(corpora, use_log=False):
             y = np.array([[next_ord]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
         return probs
 
-scores = get_scores(s)
 nc = len(s)
 nw = len(s.split())
 
@@ -56,13 +55,34 @@ model = kenlm.Model('txteval/text.arpa')
 
 sc = [score for score, _, _ in model.full_scores(s)]
 
+gpufound = torch.cuda.is_available()
+device = 'cuda' if gpufound else 'cpu'
+print('using gpu' if gpufound else 'using cpu')
 
-device = 'cuda' if torch.cuda.is_available() else 'cpu'
-
-
-class RNN(nn.Module):
+class RNN2(nn.Module):
     def __init__(self, input_size, hidden_size, output_size):
-        super(RNN, self).__init__()
+        super(RNN2, self).__init__()
+
+        self.hidden_size = hidden_size
+
+        self.i2h = nn.Linear(input_size + hidden_size, hidden_size)
+        self.i2o = nn.Linear(input_size + hidden_size, output_size)
+        self.softmax = nn.LogSoftmax(dim=1)
+
+    def forward(self, input, hidden):
+        combined = torch.cat((input, hidden), 1)
+        hidden = self.i2h(combined)
+        output = self.i2o(combined)
+        output = self.softmax(output)
+        return output, hidden
+
+    def initHidden(self):
+        return torch.zeros(BATCHSIZE, self.hidden_size, device=device)
+
+
+class RNN1(nn.Module):
+    def __init__(self, input_size, hidden_size, output_size):
+        super(RNN1, self).__init__()
 
         self.hidden_size = hidden_size
 
@@ -90,14 +110,70 @@ def mb2t(rows):
     return tensor
 
 
-PATH = './slgru_epoch120.model'
+def tf_play(size):
+    ncnt = 0
+    with tf.Session() as sess:
+        new_saver = tf.train.import_meta_graph(author + '.meta')
+        new_saver.restore(sess, author)
+        x = my_txtutils.convert_from_alphabet(ord("L"))
+        x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
 
+        # initial values
+        y = x
+        h = np.zeros([1, INTERNALSIZE * NLAYERS], dtype=np.float32)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]
+        for i in range(size):
+            yo, h = sess.run(['Yo:0', 'H:0'], feed_dict={'X:0': y, 'pkeep:0': 1., 'Hin:0': h, 'batchsize:0': 1})
 
-def pt_scores(corpora):
+            # If sampling is bedone from the topn most likely characters, the generated text
+            # is more credible and more "english". If topn is not set, it defaults to the full
+            # distribution (ALPHASIZE)
+
+            # Recommended: topn = 10 for intermediate checkpoints, topn=2 or 3 for fully trained checkpoints
+
+            c = my_txtutils.sample_from_probabilities(yo, topn=2)
+            y = np.array([[c]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
+            c = chr(my_txtutils.convert_to_alphabet(c))
+            print(c, end="")
+
+            if c == '\n':
+                ncnt = 0
+            else:
+                ncnt += 1
+            if ncnt == 70:
+                print("")
+                ncnt = 0
+
+def play(size, rnn, path):
     probs = []
 
-    rnn = RNN(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
-    rnn.load_state_dict(torch.load(PATH, map_location=torch.device('cpu')))
+    rnn.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
+
+    hidden = torch.zeros(1, INTERNALSIZE, device=device)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]
+
+    x = my_txtutils.convert_from_alphabet(ord("L"))
+    x = np.array([[x]])  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
+
+    y = mb2t(x)
+    ncnt = 0
+    for i in range(size):
+        yo, hidden = rnn(y[0], hidden)
+        c = my_txtutils.sample_from_probabilities(yo.detach().numpy(), topn=2)
+        y = mb2t(np.array([[c]]))  # shape [BATCHSIZE, SEQLEN] with BATCHSIZE=1 and SEQLEN=1
+        c = chr(my_txtutils.convert_to_alphabet(c))
+        print(c, end="")
+
+        if c == '\n':
+            ncnt = 0
+        else:
+            ncnt += 1
+        if ncnt == 70:
+            print("")
+            ncnt = 0
+
+def pt_scores(corpora, rnn, path):
+    probs = []
+
+    rnn.load_state_dict(torch.load(path, map_location=torch.device('cpu')))
 
     hidden = torch.zeros(1, INTERNALSIZE, device=device)  # [ BATCHSIZE, INTERNALSIZE * NLAYERS]
 
@@ -129,6 +205,10 @@ def wppx(sentence):
     return 10.0**(-model.score(sentence) / words)
 
 
+def ln2lt(lst):
+    return np.log10(np.exp(lst))
+
+
 def cppx_logits(scores, corpus):
   nw = len(corpus.split()) + 1
   nc = len(corpus)
@@ -136,12 +216,21 @@ def cppx_logits(scores, corpus):
   print(ip, 10 ** ip)
   return 10**(ip * nc / nw)
 
-def cppx_logprob(scores, corpus):
+def cppx_logprob(scores, corpus, convert=True):
   nw = len(corpus.split()) + 1
   nc = len(corpus)
-  ip = -np.sum(scores) / nc
+  ip = -np.sum((ln2lt(scores) if convert else scores)) / nc
   print(ip, 10 **ip)
   return 10**(ip * nc / nw)
 
-ptsc = pt_scores(s)
+gPATH = './slgru_epoch120.model'
+rPATH = './slrnn_epoch90.model'
+
+gru = RNN1(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
+rnn = RNN2(ALPHASIZE, INTERNALSIZE, ALPHASIZE)
+
+# scores = get_scores(s)
+
+# gsc = pt_scores(s, gru, gPATH)
+# rsc = pt_scores(s, rnn, rPATH)
 

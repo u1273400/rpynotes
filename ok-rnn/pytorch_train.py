@@ -168,12 +168,8 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
             else:
                 stats ='initialising stats..'
             correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
-<<<<<<< HEAD
-            acc = [1 if guess[i][j] == category[i][j] else 0 for j in range(SEQLEN)] 
+            acc = [1 if guess[i][j] == category[i][j] else 0 for j in range(SEQLEN)]
             print('epoch %d of %d (%.4f) %.4f %s / %s %s' % (epoch+1, nb_epoch, sum(acc)/SEQLEN*100, loss, lines[i], guess[0], correct))
-=======
-            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
->>>>>>> 5031781a02d8c23144b1b7fd22299205eba1b77d
         if epoch != old_epoch and epoch % 5 == 0:
             PATH = './slgru_epoch120.model'
             torch.save(rnn.state_dict(), PATH)
