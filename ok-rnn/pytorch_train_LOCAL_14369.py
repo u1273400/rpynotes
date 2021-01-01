@@ -48,7 +48,7 @@ INTERNALSIZE = 512
 NLAYERS = 3
 learning_rate = 0.001  # fixed learning rate
 dropout_pkeep = 0.8    # some dropout
-nb_epoch = 120
+nb_epoch = 75
 VALI_SEQLEN = 30
 
 # load data, either shakespeare, or the Python source of Tensorflow itself
@@ -106,6 +106,9 @@ def train(category_tensor, line_tensor):
         output, hidden = rnn(line_tensor[i], hidden)
         lint.append(output)
     input = torch.stack(lint).transpose(0,1).transpose(1,2)
+#     print(f'is={input.size()}, cs={category_tensor.size()}')
+#     print(f'is[1:]={input.size()[1:]}, cs[1:]={category_tensor.size()[1:]}')
+#     print(f'is[2:]={input.size()[2:]}, cs[2:]={category_tensor.size()[2:]}')
     loss = criterion(input, category_tensor)
     loss.backward()
 
@@ -143,7 +146,7 @@ def timeSince(since):
     return '%dm %ds' % (m, s)
 
 start = time.time()
-old_epoch=0
+
 for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_epochs=nb_epoch):
     #category, line, category_tensor, line_tensor = randomTrainingExample()
     category =  [lin2txt(l) for l in y_]
@@ -158,7 +161,7 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
         guess = [lin2txt([ch.argmax(dim=0) for ch in line]) for line in output]
         for i in range(2):
             elapsed_time = time.time() - start
-            #tss = str(datetime.timedelta(seconds=elapsed_time)) # time since start string
+            tss = str(datetime.timedelta(seconds=elapsed_time)) # time since start string
             if epoch > 0:
                 speed = epoch/elapsed_time
                 eta = (nb_epoch-epoch)/speed
@@ -168,12 +171,9 @@ for x, y_, epoch in txt.rnn_minibatch_sequencer(codetext, BATCHSIZE, SEQLEN, nb_
             else:
                 stats ='initialising stats..'
             correct = '✓' if guess[i] == category[i] else '✗ %s' % stats 
-            acc = [1 if guess[i][j] == category[i][j] else 0 for j in range(SEQLEN)]
-            print('epoch %d of %d (%.4f) %.4f %s / %s %s' % (epoch+1, nb_epoch, sum(acc)/SEQLEN*100, loss, lines[i], guess[0], correct))
-        if epoch != old_epoch and epoch % 5 == 0:
-            PATH = './slgru_epoch120.model'
-            torch.save(rnn.state_dict(), PATH)
-            old_epoch = epoch
+            print('epoch %d of %d (%s) %.4f %s / %s %s' % (epoch+1, nb_epoch, tss, loss, lines[i], guess[0], correct))
+        PATH = './slgru_epoch120.model'
+        torch.save(rnn.state_dict(), PATH)
 
     # Add current loss avg to list of losses
     if iter % plot_every == 0:
