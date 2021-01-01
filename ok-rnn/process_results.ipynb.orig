@@ -1481,4 +1481,12 @@
    "nbconvert_exporter": "python",
    "pygments_lexer": "ipython3",
 <<<<<<< HEAD
-   "version": "3.7.3" ======= "version": "3.7.9" >>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40 } }, "nbformat": 4, "nbformat_minor": 4 }
+   "version": "3.7.3"
+=======
+   "version": "3.7.9"
+>>>>>>> 1a3942c6a489549e21d25a34dae8ef43d5588a40
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 4
+}
