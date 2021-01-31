@@ -538,3 +538,46 @@ class ReluLayer(Layer):
     def __repr__(self):
         return 'ReluLayer'
 
+class GeluLayer(Layer):
+    """Layer implementing an element-wise Gaussian Error linear transformation."""
+
+    def fprop(self, inputs):
+        """Forward propagates activations through the layer transformation.
+
+        For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+
+        Returns:
+            outputs: Array of layer outputs of shape (batch_size, output_dim).
+        """
+        return self.gelu(inputs)
+
+    def bprop(self, inputs, outputs, grads_wrt_outputs):
+        """Back propagates gradients through a layer.
+
+        Given gradients with respect to the outputs of the layer calculates the
+        gradients with respect to the layer inputs.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+            outputs: Array of layer outputs calculated in forward pass of
+                shape (batch_size, output_dim).
+            grads_wrt_outputs: Array of gradients with respect to the layer
+                outputs of shape (batch_size, output_dim).
+
+        Returns:
+            Array of gradients with respect to the layer inputs of shape
+            (batch_size, input_dim).
+        """
+        return (outputs > 0) * grads_wrt_outputs
+
+    def __repr__(self):
+        return 'GeluLayer'
+
+    def gelu(self, x):
+        return 0.5*x*(1+np.tanh(np.sqrt(2/np.pi)*(x+0.044715*np.power(x,3))))
+    
+    def f_gelu(self, x):
+        return 0.5 * np.tanh(0.0356774 * np.power(x,3) + 0.797885 * x) + (0.0535161 * np.power(x,3) + 0.398942 * x) * np.power(1/np.cosh(0.0356774 * np.power(x, 3) + 0.797885 * x),2) + 0.5

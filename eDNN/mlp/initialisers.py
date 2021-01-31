@@ -98,6 +98,8 @@ class GlorotUniformInit(object):
         self.rng = rng
 
     def __call__(self, shape):
+        if type(shape) is int:
+            shape = (1,shape)
         assert len(shape) == 2, (
             'Initialiser should only be used for two dimensional arrays.')
         std = self.gain * (2. / (shape[0] + shape[1]))**0.5
@@ -139,5 +141,9 @@ class GlorotNormalInit(object):
         self.rng = rng
 
     def __call__(self, shape):
+        if type(shape) is int:
+            shape = (1,shape)
+        assert len(shape) == 2, (
+            'Initialiser should only be used for two dimensional arrays.')
         std = self.gain * (2. / (shape[0] + shape[1]))**0.5
         return self.rng.normal(loc=0., scale=std, size=shape)
