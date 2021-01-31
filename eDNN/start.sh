@@ -2,4 +2,4 @@
 
 export MLP_DATA_DIR=`pwd`/data
 
-jupyter lab
+jupyter lab --ip=*
