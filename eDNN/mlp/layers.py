@@ -536,7 +536,7 @@ class ReluLayer(Layer):
         return (outputs > 0) * grads_wrt_outputs
 
     def __repr__(self):
-        return 'ReluLayer'
+        return type(self).__name__
 
 class GeluLayer(Layer):
     """Layer implementing an element-wise Gaussian Error linear transformation."""
@@ -552,7 +552,7 @@ class GeluLayer(Layer):
         Returns:
             outputs: Array of layer outputs of shape (batch_size, output_dim).
         """
-        return self.gelu(inputs)
+        return self.lu(inputs)
 
     def bprop(self, inputs, outputs, grads_wrt_outputs):
         """Back propagates gradients through a layer.
@@ -571,13 +571,178 @@ class GeluLayer(Layer):
             Array of gradients with respect to the layer inputs of shape
             (batch_size, input_dim).
         """
-        return (outputs > 0) * grads_wrt_outputs
+        return self.f_lu(inputs) * grads_wrt_outputs
 
     def __repr__(self):
-        return 'GeluLayer'
+        return type(self).__name__
 
-    def gelu(self, x):
+    def lu(self, x):
         return 0.5*x*(1+np.tanh(np.sqrt(2/np.pi)*(x+0.044715*np.power(x,3))))
     
-    def f_gelu(self, x):
+    def f_lu(self, x):
         return 0.5 * np.tanh(0.0356774 * np.power(x,3) + 0.797885 * x) + (0.0535161 * np.power(x,3) + 0.398942 * x) * np.power(1/np.cosh(0.0356774 * np.power(x, 3) + 0.797885 * x),2) + 0.5
+
+    
+class EluLayer(Layer):
+    """Layer implementing an element-wise Exponential linear transformation."""
+
+    def __init__(self, gain=1.):
+        """Construct a normalised initilisation random initialiser object.
+
+        Args:
+            gain: Multiplicative factor to scale initialised weights by.
+                Recommended values is 1
+        """
+        self.alpha = gain
+
+    def fprop(self, inputs):
+        """Forward propagates activations through the layer transformation.
+
+        For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+
+        Returns:
+            outputs: Array of layer outputs of shape (batch_size, output_dim).
+        """
+        return self.lu(inputs)
+
+    def bprop(self, inputs, outputs, grads_wrt_outputs):
+        """Back propagates gradients through a layer.
+
+        Given gradients with respect to the outputs of the layer calculates the
+        gradients with respect to the layer inputs.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+            outputs: Array of layer outputs calculated in forward pass of
+                shape (batch_size, output_dim).
+            grads_wrt_outputs: Array of gradients with respect to the layer
+                outputs of shape (batch_size, output_dim).
+
+        Returns:
+            Array of gradients with respect to the layer inputs of shape
+            (batch_size, input_dim).
+        """
+        return self.f_lu(inputs) * grads_wrt_outputs
+
+    def __repr__(self):
+        return type(self).__name__
+
+    def lu(self, x):
+        return x * (x>=0) + self.alpha*(np.exp(x)-1) * (x<0)
+    
+    def f_lu(self, x):
+        return (x>=0) + (self.alpha+self.lu(x)) * (x<0)
+    
+
+    
+class SeluLayer(Layer):
+    """Layer implementing an element-wise Scaled exponential linear transformation."""
+
+    def __init__(self, gain=1.):
+        """Construct a normalised initilisation random initialiser object.
+
+        Args:
+            gain: Multiplicative factor to scale initialised weights by.
+                Recommended values is 1
+        """
+        self.alpha = gain
+
+    def fprop(self, inputs):
+        """Forward propagates activations through the layer transformation.
+
+        For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+
+        Returns:
+            outputs: Array of layer outputs of shape (batch_size, output_dim).
+        """
+        return self.lu(inputs)
+
+    def bprop(self, inputs, outputs, grads_wrt_outputs):
+        """Back propagates gradients through a layer.
+
+        Given gradients with respect to the outputs of the layer calculates the
+        gradients with respect to the layer inputs.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+            outputs: Array of layer outputs calculated in forward pass of
+                shape (batch_size, output_dim).
+            grads_wrt_outputs: Array of gradients with respect to the layer
+                outputs of shape (batch_size, output_dim).
+
+        Returns:
+            Array of gradients with respect to the layer inputs of shape
+            (batch_size, input_dim).
+        """
+        return self.f_lu(inputs) * grads_wrt_outputs
+
+    def __repr__(self):
+        return type(self).__name__
+
+    def lu(self, x):
+        return x * (x>=0) + self.alpha*(np.exp(x)-1) * (x<0)
+    
+    def f_lu(self, x):
+        return (x>=0) + (self.alpha+self.lu(x)) * (x<0)    
+
+    
+class IsrluLayer(Layer):
+    """Layer implementing an element-wise Inverse Square root linear transformation."""
+
+    def __init__(self, gain=1.):
+        """Construct a normalised initilisation random initialiser object.
+
+        Args:
+            gain: Multiplicative factor to scale initialised weights by.
+                Recommended values is 1
+        """
+        self.alpha = gain
+
+    def fprop(self, inputs):
+        """Forward propagates activations through the layer transformation.
+
+        For inputs `x` and outputs `y` this corresponds to `y = max(0, x)`.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+
+        Returns:
+            outputs: Array of layer outputs of shape (batch_size, output_dim).
+        """
+        return self.lu(inputs)
+
+    def bprop(self, inputs, outputs, grads_wrt_outputs):
+        """Back propagates gradients through a layer.
+
+        Given gradients with respect to the outputs of the layer calculates the
+        gradients with respect to the layer inputs.
+
+        Args:
+            inputs: Array of layer inputs of shape (batch_size, input_dim).
+            outputs: Array of layer outputs calculated in forward pass of
+                shape (batch_size, output_dim).
+            grads_wrt_outputs: Array of gradients with respect to the layer
+                outputs of shape (batch_size, output_dim).
+
+        Returns:
+            Array of gradients with respect to the layer inputs of shape
+            (batch_size, input_dim).
+        """
+        return self.f_lu(inputs) * grads_wrt_outputs
+
+    def __repr__(self):
+        return type(self).__name__
+
+    def lu(self, x):
+        return x * (x>=0) + (x/np.sqrt(1+self.alpha*np.power(x,2))) * (x<0)
+    
+    def f_lu(self, x):
+        return (x>=0) + np.power(1/np.sqrt(1+self.alpha*np.power(x,2)),3) * (x<0)
+    
+    
